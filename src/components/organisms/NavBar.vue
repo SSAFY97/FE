@@ -1,9 +1,9 @@
 <template>
   <header
-    class="sticky top-0 z-40 border-b border-white/40 bg-white/50 backdrop-blur-sm"
+    class="fixed left-1/2 top-3 z-40 w-full max-w-5xl -translate-x-1/2 px-4"
   >
     <div
-      class="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6"
+      class="flex h-14 items-center justify-between rounded-2xl border border-white/40 bg-white/50 px-4 shadow-soft backdrop-blur-sm sm:px-6"
     >
       <RouterLink to="/" class="text-lg tracking-tight text-ink transition hover:text-accent">
         LocalHub

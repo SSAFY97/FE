@@ -1,15 +1,15 @@
 <template>
   <div class="relative overflow-hidden">
     <div
-      class="pointer-events-none absolute inset-x-0 top-0 h-[72vh] bg-cover bg-center"
-      style="background-image: url('/hero.webp')"
+      class="hero-fade pointer-events-none absolute inset-x-0 top-0 h-[80vh] bg-cover bg-center"
+      style="background-image: url('/hero_light.webp')"
     >
       <div
-        class="absolute inset-0 bg-gradient-to-b from-surface/20 via-surface/55 to-surface"
+        class="absolute inset-0 bg-gradient-to-b from-surface/15 via-transparent to-transparent"
       />
     </div>
 
-    <div class="relative z-10 flex flex-col gap-12 pb-16 pt-10 sm:pt-16">
+    <div class="relative z-10 flex flex-col gap-12 pb-16 pt-24 sm:pt-28">
       <div class="mx-auto max-w-3xl px-4 text-center">
         <p class="text-3xl text-ink sm:text-4xl">LocalHub</p>
         <p class="mt-3 text-sm text-muted sm:text-base">
@@ -88,3 +88,20 @@ onUnmounted(() => {
   if (timer) clearInterval(timer)
 })
 </script>
+
+<style scoped>
+.hero-fade {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 40%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 40%,
+    transparent 100%
+  );
+}
+</style>
