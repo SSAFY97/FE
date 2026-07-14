@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'YeogiOttaeJalnan';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff')
+    format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-surface: oklch(95.1% 0.026 236.824);
+  --color-ink: oklch(28% 0.04 250);
+  --color-muted: oklch(48% 0.03 250);
+  --color-accent: oklch(52% 0.12 240);
+  --color-accent-soft: oklch(88% 0.04 236);
+  --color-line: oklch(86% 0.02 236);
+}
+
+@layer base {
+  html,
+  body,
+  #app {
+    @apply min-h-full;
+  }
+
+  body {
+    @apply bg-surface text-ink font-sans antialiased;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

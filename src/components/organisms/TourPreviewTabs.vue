@@ -1,0 +1,76 @@
+<template>
+  <section class="mx-auto w-full max-w-5xl animate-fade-in px-4">
+    <div class="overflow-hidden rounded-3xl bg-white/75 p-4 shadow-soft backdrop-blur-md sm:p-6">
+      <div class="mb-4 flex gap-1 overflow-x-auto pb-1">
+        <button
+          v-for="tab in tabs"
+          :key="tab.key"
+          type="button"
+          class="shrink-0 rounded-xl px-3 py-2 text-sm transition"
+          :class="
+            tab.key === active
+              ? 'bg-accent text-white shadow-soft'
+              : 'bg-accent-soft/60 text-ink hover:bg-white'
+          "
+          @click="$emit('select', tab.key)"
+        >
+          {{ tab.label }}
+        </button>
+      </div>
+
+      <div v-if="loading" class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div
+          v-for="n in 8"
+          :key="n"
+          class="h-36 animate-pulse rounded-2xl bg-accent-soft/80"
+        />
+      </div>
+
+      <Transition name="fade" mode="out-in">
+        <div
+          v-if="!loading"
+          :key="active"
+          class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+        >
+          <TourCard
+            v-for="item in items"
+            :key="item.contentid"
+            :title="item.title"
+            :address="item.addr1"
+            :image="item.firstimage2 || item.firstimage"
+          />
+          <p
+            v-if="!items.length"
+            class="col-span-full py-10 text-center text-sm text-muted"
+          >
+            표시할 이미지가 없습니다.
+          </p>
+        </div>
+      </Transition>
+    </div>
+  </section>
+</template>
+
+<script setup>
+import TourCard from '@/components/molecules/TourCard.vue'
+
+defineProps({
+  tabs: { type: Array, default: () => [] },
+  active: { type: String, default: '' },
+  items: { type: Array, default: () => [] },
+  loading: Boolean,
+})
+
+defineEmits(['select'])
+</script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
