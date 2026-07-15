@@ -26,7 +26,9 @@
       {{
         loading
           ? '불러오는 중…'
-          : `${displayItems.length}곳 표시${items.length > displayItems.length ? ` · 전체 ${items.length}곳` : ''}`
+          : totalCount
+            ? `${rangeStart}–${rangeEnd} · 전체 ${totalCount}`
+            : '0곳 표시'
       }}
       <span v-if="sort === 'distance'"> · 거리순</span>
     </p>
@@ -53,9 +55,47 @@
     />
     <template v-else>
       <TourGrid :items="displayItems" @select="openTourDetail" />
-      <div v-if="hasMore" class="mt-6 flex justify-center">
-        <BaseButton variant="secondary" @click="loadMore">더 보기</BaseButton>
-      </div>
+
+      <nav
+        v-if="totalPages > 1"
+        class="mt-8 flex flex-wrap items-center justify-center gap-1"
+        aria-label="페이지네이션"
+      >
+        <BaseButton
+          variant="ghost"
+          :disabled="page <= 1"
+          aria-label="이전 페이지"
+          @click="goToPage(page - 1)"
+        >
+          이전
+        </BaseButton>
+        <button
+          v-for="p in pageNumbers"
+          :key="p"
+          type="button"
+          class="min-w-9 rounded-xl px-3 py-2 text-sm transition"
+          :class="
+            p === page
+              ? 'bg-accent font-bold text-main shadow-soft'
+              : p === '…'
+                ? 'cursor-default text-muted'
+                : 'text-ink hover:bg-accent-soft'
+          "
+          :disabled="p === '…'"
+          :aria-current="p === page ? 'page' : undefined"
+          @click="p !== '…' && goToPage(p)"
+        >
+          {{ p }}
+        </button>
+        <BaseButton
+          variant="ghost"
+          :disabled="page >= totalPages"
+          aria-label="다음 페이지"
+          @click="goToPage(page + 1)"
+        >
+          다음
+        </BaseButton>
+      </nav>
     </template>
 
     <TourDetailModal
@@ -86,7 +126,7 @@ const sort = ref('latest')
 const items = ref([])
 const loading = ref(false)
 const error = ref('')
-const visibleCount = ref(PAGE_SIZE)
+const page = ref(1)
 const tourModalOpen = ref(false)
 const selectedLocationId = ref('')
 const { position, ready, status, requestLocation } = useGeolocation()
@@ -96,8 +136,48 @@ const categoryOptions = [
   ...TOUR_CATEGORIES.map((c) => ({ value: c.key, label: c.label })),
 ]
 
-const displayItems = computed(() => items.value.slice(0, visibleCount.value))
-const hasMore = computed(() => visibleCount.value < items.value.length)
+const totalCount = computed(() => items.value.length)
+const totalPages = computed(() => Math.max(1, Math.ceil(totalCount.value / PAGE_SIZE)))
+
+const displayItems = computed(() => {
+  const start = (page.value - 1) * PAGE_SIZE
+  return items.value.slice(start, start + PAGE_SIZE)
+})
+
+const rangeStart = computed(() =>
+  totalCount.value ? (page.value - 1) * PAGE_SIZE + 1 : 0,
+)
+const rangeEnd = computed(() =>
+  Math.min(page.value * PAGE_SIZE, totalCount.value),
+)
+
+/** @type {import('vue').ComputedRef<(number | '…')[]>} */
+const pageNumbers = computed(() => {
+  const total = totalPages.value
+  const current = page.value
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1)
+  }
+  const pages = new Set([1, total, current, current - 1, current + 1])
+  if (current <= 3) {
+    pages.add(2)
+    pages.add(3)
+    pages.add(4)
+  }
+  if (current >= total - 2) {
+    pages.add(total - 1)
+    pages.add(total - 2)
+    pages.add(total - 3)
+  }
+  const sorted = [...pages].filter((p) => p >= 1 && p <= total).sort((a, b) => a - b)
+  /** @type {(number | '…')[]} */
+  const result = []
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) result.push('…')
+    result.push(sorted[i])
+  }
+  return result
+})
 
 const geoBanner = computed(() => {
   if (sort.value !== 'distance') return ''
@@ -118,12 +198,15 @@ function closeTourDetail() {
   selectedLocationId.value = ''
 }
 
-function loadMore() {
-  visibleCount.value += PAGE_SIZE
+function goToPage(p) {
+  if (typeof p !== 'number') return
+  const next = Math.min(Math.max(1, p), totalPages.value)
+  page.value = next
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 function onSearch() {
-  visibleCount.value = PAGE_SIZE
+  page.value = 1
   load()
 }
 
@@ -138,6 +221,7 @@ async function load() {
       sort: sort.value,
       userPos: position.value,
     })
+    if (page.value > totalPages.value) page.value = 1
   } catch {
     items.value = []
     error.value = '관광 정보를 불러오지 못했습니다.'
