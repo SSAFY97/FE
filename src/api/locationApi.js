@@ -16,22 +16,23 @@ function unwrapList(data) {
 
 /** @param {Record<string, unknown>} item */
 function mapLocation(item) {
-  const image = item.image_url || item.firstimage || item.firstimage2 || ''
+  const firstimage = String(item.image_url || item.firstimage || '')
+  const firstimage2 = String(item.firstimage2 || firstimage || '')
   return {
     id: String(item.id ?? item.contentid ?? ''),
     contentid: String(item.contentid ?? item.id ?? ''),
     contenttypeid: String(item.content_type_id ?? item.contenttypeid ?? ''),
-    title: item.title ?? '',
-    addr1: item.address ?? item.addr1 ?? '',
-    addr2: item.addr2 ?? '',
-    tel: item.tel ?? '',
+    title: String(item.title ?? ''),
+    addr1: String(item.address ?? item.addr1 ?? ''),
+    addr2: String(item.addr2 ?? ''),
+    tel: String(item.tel ?? ''),
     mapx: String(item.longitude ?? item.mapx ?? ''),
     mapy: String(item.latitude ?? item.mapy ?? ''),
-    firstimage: image,
-    firstimage2: item.firstimage2 || image,
-    createdtime: item.createdtime ?? '',
-    modifiedtime: item.updated_at ?? item.modifiedtime ?? '',
-    category: item.category,
+    firstimage: firstimage || firstimage2,
+    firstimage2: firstimage2 || firstimage,
+    createdtime: String(item.createdtime ?? item.created_at ?? ''),
+    modifiedtime: String(item.updated_at ?? item.modifiedtime ?? ''),
+    category: item.category != null ? String(item.category) : undefined,
   }
 }
 

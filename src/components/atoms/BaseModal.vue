@@ -10,8 +10,8 @@
       role="dialog"
       aria-modal="true"
     >
-      <div class="mb-4 flex items-center justify-between">
-        <h3 class="text-lg font-bold text-ink">{{ title }}</h3>
+      <div class="mb-4 flex items-start justify-between gap-3">
+        <h3 class="min-w-0 flex-1 text-lg font-bold leading-snug text-ink">{{ title }}</h3>
         <button
           type="button"
           class="rounded-lg p-1 text-muted hover:bg-surface"

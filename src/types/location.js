@@ -13,6 +13,7 @@
 
 /**
  * @typedef {Object} LocationDetail
+ * @property {string} id
  * @property {string} contentid
  * @property {string} contenttypeid
  * @property {string} title
@@ -22,6 +23,7 @@
  * @property {string} [firstimage]
  * @property {string} [firstimage2]
  * @property {string} [createdtime]
+ * @property {string} [category]
  */
 
 export {}
