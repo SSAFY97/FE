@@ -14,6 +14,14 @@
     <template v-if="name === 'chat'">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
     </template>
+    <template v-else-if="name === 'bot'">
+      <path d="M12 8V4H8" />
+      <rect width="16" height="12" x="4" y="8" rx="2" />
+      <path d="M2 14h2" />
+      <path d="M20 14h2" />
+      <path d="M9 13v2" />
+      <path d="M15 13v2" />
+    </template>
     <template v-else-if="name === 'search'">
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.3-4.3" />

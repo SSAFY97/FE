@@ -42,7 +42,7 @@
           aria-label="챗봇 열기"
           @click="$emit('toggle-chat')"
         >
-          <BaseIcon name="chat" :size="20" />
+          <BaseIcon name="bot" :size="20" />
         </button>
       </nav>
     </div>
