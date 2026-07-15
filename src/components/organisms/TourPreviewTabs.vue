@@ -1,16 +1,18 @@
 <template>
   <section class="mx-auto w-full max-w-5xl animate-fade-in px-4">
     <div class="overflow-hidden rounded-3xl bg-main p-4 shadow-soft sm:p-6">
-      <div class="mb-4 flex gap-1 overflow-x-auto pb-1">
+      <div class="mb-4 flex gap-1 overflow-x-auto pb-1" role="tablist">
         <button
           v-for="tab in tabs"
           :key="tab.key"
           type="button"
+          role="tab"
+          :aria-selected="tab.key === active"
           class="shrink-0 rounded-xl px-3 py-2 text-sm transition"
           :class="
             tab.key === active
-              ? 'bg-main text-ink shadow-soft'
-              : 'bg-accent-soft text-ink hover:bg-accent-soft'
+              ? 'bg-accent text-main shadow-soft'
+              : 'bg-accent-soft text-ink hover:brightness-95'
           "
           @click="$emit('select', tab.key)"
         >
@@ -38,16 +40,17 @@
             <TourCard
               v-for="item in items"
               :key="item.contentid"
+              :id="item.contentid || item.id"
               :title="item.title"
               :address="item.addr1"
               :image="item.firstimage2 || item.firstimage"
+              @select="$emit('select-item', $event)"
             />
-            <p
+            <StateMessage
               v-if="!items.length"
-              class="col-span-full py-10 text-center text-sm text-muted"
-            >
-              표시할 이미지가 없습니다.
-            </p>
+              class="col-span-full"
+              title="표시할 장소가 없습니다"
+            />
           </div>
         </Transition>
       </div>
@@ -57,6 +60,7 @@
 
 <script setup>
 import TourCard from '@/components/molecules/TourCard.vue'
+import StateMessage from '@/components/molecules/StateMessage.vue'
 
 defineProps({
   tabs: { type: Array, default: () => [] },
@@ -66,7 +70,7 @@ defineProps({
   loading: Boolean,
 })
 
-defineEmits(['select'])
+defineEmits(['select', 'select-item'])
 </script>
 
 <style scoped>

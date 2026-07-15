@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-screen flex-col">
     <NavBar @toggle-chat="chatOpen = !chatOpen" />
-    <main class="relative flex-1"">
+    <main class="relative flex-1">
       <RouterView />
     </main>
     <ChatModal :open="chatOpen" @close="chatOpen = false" />

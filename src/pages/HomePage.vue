@@ -24,16 +24,24 @@
         :items="previewItems"
         :loading="previewLoading"
         @select="onSelectTab"
+        @select-item="openTourDetail"
       />
 
       <HotPostList :posts="hotPosts" />
     </div>
+
+    <TourDetailModal
+      :open="tourModalOpen"
+      :location-id="selectedLocationId"
+      @close="closeTourDetail"
+    />
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import TourPreviewTabs from '@/components/organisms/TourPreviewTabs.vue'
+import TourDetailModal from '@/components/organisms/TourDetailModal.vue'
 import HotPostList from '@/components/organisms/HotPostList.vue'
 import { TOUR_CATEGORIES } from '@/constants/tourism'
 import { tourismApi } from '@/services/tourismApi'
@@ -46,12 +54,24 @@ const loadedTab = ref(tabs[0].key)
 const previewItems = ref([])
 const previewLoading = ref(true)
 const hotPosts = ref([])
+const tourModalOpen = ref(false)
+const selectedLocationId = ref('')
 const { isDark } = useTheme()
 const heroStyle = computed(() => ({
   backgroundImage: `url('${isDark.value ? '/hero_dark.webp' : '/hero_light.webp'}')`,
 }))
 let timer = null
 let loadSeq = 0
+
+function openTourDetail(id) {
+  selectedLocationId.value = id
+  tourModalOpen.value = true
+}
+
+function closeTourDetail() {
+  tourModalOpen.value = false
+  selectedLocationId.value = ''
+}
 
 async function loadPreview(category) {
   activeTab.value = category

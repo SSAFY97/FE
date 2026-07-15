@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto max-w-2xl px-4 pt-24">
+  <PageShell width="narrow">
     <div v-if="loading" class="h-72 animate-pulse rounded-2xl bg-main" />
     <article v-else-if="post" class="animate-fade-in">
       <div class="mb-4 flex flex-wrap items-center gap-2">
@@ -58,12 +58,13 @@
         </BaseButton>
       </div>
     </BaseModal>
-  </div>
+  </PageShell>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
+import PageShell from '@/components/molecules/PageShell.vue'
 import BaseButton from '@/components/atoms/BaseButton.vue'
 import BaseIcon from '@/components/atoms/BaseIcon.vue'
 import BaseInput from '@/components/atoms/BaseInput.vue'

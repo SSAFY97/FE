@@ -5,7 +5,8 @@
     @click.self="$emit('close')"
   >
     <div
-      class="animate-scale-in w-full max-w-md rounded-2xl bg-main p-5 shadow-soft"
+      class="animate-scale-in w-full rounded-2xl bg-main p-5 shadow-soft"
+      :class="sizeClass"
       role="dialog"
       aria-modal="true"
     >
@@ -26,12 +27,25 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import BaseIcon from './BaseIcon.vue'
 
-defineProps({
+const props = defineProps({
   open: Boolean,
   title: { type: String, default: '' },
+  size: {
+    type: String,
+    default: 'md',
+  },
 })
 
 defineEmits(['close'])
+
+const sizeClass = computed(() => {
+  const map = {
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+  }
+  return map[props.size] || map.md
+})
 </script>

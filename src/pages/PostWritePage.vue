@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto max-w-2xl px-4 py-8">
+  <PageShell width="narrow">
     <h1 class="mb-6 text-2xl text-ink">글쓰기</h1>
     <div class="rounded-2xl bg-main p-5 shadow-soft">
       <PostForm
@@ -11,12 +11,13 @@
       />
       <p v-if="error" class="mt-3 text-sm text-danger">{{ error }}</p>
     </div>
-  </div>
+  </PageShell>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import PageShell from '@/components/molecules/PageShell.vue'
 import PostForm from '@/components/organisms/PostForm.vue'
 import { postApi } from '@/services/postApi'
 

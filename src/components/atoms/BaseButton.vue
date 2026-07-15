@@ -1,8 +1,8 @@
 <template>
   <component
     :is="tag"
-    :type="tag === 'button' ? type : undefined"
-    :disabled="disabled || loading"
+    :type="isNativeButton ? type : undefined"
+    :disabled="isNativeButton ? disabled || loading : undefined"
     class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50"
     :class="variantClass"
     v-bind="$attrs"
@@ -28,16 +28,18 @@ const props = defineProps({
     default: 'button',
   },
   tag: {
-    type: String,
+    type: [String, Object],
     default: 'button',
   },
   disabled: Boolean,
   loading: Boolean,
 })
 
+const isNativeButton = computed(() => props.tag === 'button')
+
 const variantClass = computed(() => {
   const map = {
-    primary: 'bg-main text-ink hover:brightness-105 shadow-soft',
+    primary: 'bg-accent text-main hover:brightness-110 shadow-soft',
     secondary: 'bg-accent-soft text-ink hover:bg-main',
     ghost: 'bg-transparent text-ink hover:bg-accent-soft',
     danger: 'bg-danger text-ink hover:brightness-105',

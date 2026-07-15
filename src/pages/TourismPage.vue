@@ -1,6 +1,5 @@
 <template>
-  <div class="min-h-screen bg-subpage-radial pt-[4.25rem]">
-    <div class="mx-auto max-w-6xl px-4 py-8">
+  <PageShell>
     <div class="mb-6">
       <h1 class="text-2xl text-ink">관광정보</h1>
       <p class="mt-1 text-sm text-muted">서울의 여행지를 카테고리별로 둘러보세요</p>
@@ -28,15 +27,40 @@
         class="h-56 animate-pulse rounded-2xl bg-main"
       />
     </div>
-      <TourGrid v-else :items="displayItems" />
-    </div>
-  </div>
+    <StateMessage
+      v-else-if="error"
+      tone="error"
+      title="불러오지 못했습니다"
+      :description="error"
+      action-label="다시 시도"
+      @action="load"
+    />
+    <StateMessage
+      v-else-if="!displayItems.length"
+      title="표시할 장소가 없습니다"
+      description="검색어나 카테고리를 바꿔 보세요."
+    />
+    <TourGrid
+      v-else
+      :items="displayItems"
+      @select="openTourDetail"
+    />
+
+    <TourDetailModal
+      :open="tourModalOpen"
+      :location-id="selectedLocationId"
+      @close="closeTourDetail"
+    />
+  </PageShell>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import PageShell from '@/components/molecules/PageShell.vue'
+import StateMessage from '@/components/molecules/StateMessage.vue'
 import FilterToolbar from '@/components/organisms/FilterToolbar.vue'
 import TourGrid from '@/components/organisms/TourGrid.vue'
+import TourDetailModal from '@/components/organisms/TourDetailModal.vue'
 import { TOUR_CATEGORIES, TOUR_SORT_OPTIONS } from '@/constants/tourism'
 import { tourismApi } from '@/services/tourismApi'
 import { useGeolocation } from '@/composables/useGeolocation'
@@ -46,6 +70,9 @@ const category = ref('전체')
 const sort = ref('latest')
 const items = ref([])
 const loading = ref(false)
+const error = ref('')
+const tourModalOpen = ref(false)
+const selectedLocationId = ref('')
 const { position, ready, requestLocation } = useGeolocation()
 
 const categoryOptions = [
@@ -55,8 +82,19 @@ const categoryOptions = [
 
 const displayItems = computed(() => items.value.slice(0, 80))
 
+function openTourDetail(id) {
+  selectedLocationId.value = id
+  tourModalOpen.value = true
+}
+
+function closeTourDetail() {
+  tourModalOpen.value = false
+  selectedLocationId.value = ''
+}
+
 async function load() {
   loading.value = true
+  error.value = ''
   if (sort.value === 'distance') requestLocation()
   try {
     items.value = await tourismApi.search({
@@ -67,6 +105,7 @@ async function load() {
     })
   } catch {
     items.value = []
+    error.value = '관광 정보를 불러오지 못했습니다.'
   } finally {
     loading.value = false
   }
