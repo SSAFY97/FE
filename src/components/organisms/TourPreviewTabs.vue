@@ -6,19 +6,21 @@
     @focusin="$emit('pause')"
     @focusout="onFocusOut"
   >
-    <div class="overflow-hidden rounded-3xl bg-main p-4 shadow-soft sm:p-6">
-      <div class="mb-4 flex gap-1 overflow-x-auto pb-1" role="tablist">
+    <div
+      class="overflow-hidden rounded-3xl border border-line/50 bg-surface/80 p-4 shadow-soft backdrop-blur-md sm:p-6"
+    >
+      <div class="mb-4 flex gap-1 overflow-x-auto pb-1 [scrollbar-width:thin]" role="tablist">
         <button
           v-for="tab in tabs"
           :key="tab.key"
           type="button"
           role="tab"
           :aria-selected="tab.key === active"
-          class="shrink-0 rounded-xl px-3 py-2 text-sm transition"
+          class="shrink-0 rounded-xl border px-3 py-2 text-sm transition"
           :class="
             tab.key === active
-              ? 'bg-accent text-main shadow-soft'
-              : 'bg-accent-soft text-ink hover:brightness-95'
+              ? 'border-accent bg-accent text-on-accent shadow-soft'
+              : 'border-line/70 bg-main text-ink hover:border-accent/40'
           "
           @click="$emit('select', tab.key)"
         >
@@ -26,7 +28,10 @@
         </button>
       </div>
 
-      <div class="preview-stage relative">
+      <div
+        class="preview-stage relative"
+        :class="{ 'preview-stage--reserved': loading && !items.length }"
+      >
         <div
           v-if="loading && !items.length"
           class="grid grid-cols-2 gap-3 sm:grid-cols-4"
@@ -34,7 +39,7 @@
           <div
             v-for="n in 8"
             :key="n"
-            class="h-60 animate-pulse rounded-2xl bg-accent-soft"
+            class="h-60 animate-pulse rounded-2xl border border-line/50 bg-accent-soft"
           />
         </div>
 
@@ -69,11 +74,11 @@
         <span
           v-for="tab in tabs"
           :key="tab.key"
-          class="h-1.5 rounded-full transition-all duration-300"
+          class="h-2 rounded-full transition-all duration-300"
           :class="
             tab.key === active
               ? 'w-5 bg-accent'
-              : 'w-1.5 bg-line'
+              : 'w-2 bg-line'
           "
         />
       </div>
@@ -81,7 +86,7 @@
       <div class="mt-4 text-center">
         <RouterLink
           to="/tourism"
-          class="text-sm text-accent transition hover:underline"
+          class="text-sm font-medium text-accent transition hover:underline"
         >
           관광정보 전체 보기
         </RouterLink>
@@ -114,13 +119,13 @@ function onFocusOut(e) {
 </script>
 
 <style scoped>
-.preview-stage {
+.preview-stage--reserved {
   /* 카드 h-60(240px) × 행 + gap-3 — 모바일 4행 / sm 2행 */
   min-height: calc(15rem * 4 + 0.75rem * 3);
 }
 
 @media (min-width: 640px) {
-  .preview-stage {
+  .preview-stage--reserved {
     min-height: calc(15rem * 2 + 0.75rem);
   }
 }

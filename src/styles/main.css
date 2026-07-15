@@ -64,7 +64,7 @@
   --color-surface: #edeaf5;
   --color-ink: #2f3443;
   --color-muted: #666d7d;
-  --color-accent: #6a66a8;
+  --color-accent: #5c58a0;
   --color-accent-soft: #ebe8f2;
   --color-line: #d3d6e2;
   --color-danger: #df9c90;
@@ -73,13 +73,15 @@
   --color-like-soft: #f8e8ec;
   --color-warm: #f1e0bf;
   --color-warm-ink: #7c5b36;
+  --color-on-accent: #ffffff;
+  --color-scrim: rgb(47 52 67 / 0.4);
 
   /* PANTONE 11-4201 (Cloud Dancer) 계열 메인 톤 */
   --color-main: oklch(99% 0.004 272.788);
   --color-surface: oklch(93% 0.034 272.788);
   --color-ink: oklch(30% 0.045 274);
   --color-muted: oklch(50% 0.03 274);
-  --color-accent: oklch(52% 0.1 280);
+  --color-accent: oklch(48% 0.12 280);
   --color-accent-soft: oklch(92% 0.03 280);
   --color-line: oklch(84% 0.022 278);
   --color-danger: oklch(72% 0.08 16);
@@ -88,6 +90,8 @@
   --color-like-soft: oklch(94% 0.025 8);
   --color-warm: oklch(89% 0.05 58);
   --color-warm-ink: oklch(49% 0.08 42);
+  --color-on-accent: #ffffff;
+  --color-scrim: color-mix(in oklab, oklch(22% 0.03 274) 42%, transparent);
 }
 
 html[data-theme='dark'] {
@@ -96,29 +100,34 @@ html[data-theme='dark'] {
   --color-surface: #171a26;
   --color-ink: #e8eaf5;
   --color-muted: #b8bdd0;
-  --color-accent: #b4b0e0;
+  --color-accent: #8b85c9;
   --color-accent-soft: #32374b;
-  --color-line: #3b4058;
+  --color-line: #5a6080;
   --color-danger: #e2a59b;
   --color-danger-soft: #4a2f33;
   --color-like: #e8a0b0;
   --color-like-soft: #4a3038;
   --color-warm: #5c4c36;
   --color-warm-ink: #f4dcc1;
+  --color-on-accent: #ffffff;
+  --color-scrim: rgb(0 0 0 / 0.55);
 
   --color-main: oklch(26.9% 0 0);
   --color-surface: oklch(21% 0.02 275);
   --color-ink: oklch(93% 0.015 275);
   --color-muted: oklch(79% 0.018 275);
-  --color-accent: oklch(78% 0.08 280);
+  /* Primary 채움용: 흰 글자와 대비되도록 다크에서도 중간 명도 유지 */
+  --color-accent: oklch(62% 0.12 280);
   --color-accent-soft: oklch(34% 0.04 280);
-  --color-line: oklch(43% 0.02 275);
+  --color-line: oklch(50% 0.025 275);
   --color-danger: oklch(73% 0.075 20);
   --color-danger-soft: oklch(38% 0.045 20);
   --color-like: oklch(78% 0.09 8);
   --color-like-soft: oklch(35% 0.04 8);
   --color-warm: oklch(41% 0.04 64);
   --color-warm-ink: oklch(87% 0.05 66);
+  --color-on-accent: #ffffff;
+  --color-scrim: color-mix(in oklab, oklch(8% 0.02 275) 62%, transparent);
 }
 
 @layer base {

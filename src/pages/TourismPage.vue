@@ -37,7 +37,7 @@
       <div
         v-for="n in 8"
         :key="n"
-        class="h-56 animate-pulse rounded-2xl bg-main"
+        class="h-60 animate-pulse rounded-2xl border border-line/50 bg-accent-soft"
       />
     </div>
     <StateMessage
@@ -76,7 +76,7 @@
           class="min-w-9 rounded-xl px-3 py-2 text-sm transition"
           :class="
             p === page
-              ? 'bg-accent font-bold text-main shadow-soft'
+              ? 'bg-accent font-bold text-on-accent shadow-soft'
               : p === '…'
                 ? 'cursor-default text-muted'
                 : 'text-ink hover:bg-accent-soft'

@@ -1,11 +1,11 @@
 <template>
   <div
     v-if="open"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-ink/30 p-4 backdrop-blur-[2px]"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-scrim p-4 backdrop-blur-[2px]"
     @click.self="emit('close')"
   >
     <div
-      class="animate-scale-in flex max-h-[min(90vh,40rem)] w-full flex-col rounded-2xl bg-main shadow-soft"
+      class="animate-scale-in flex max-h-[min(90vh,40rem)] w-full flex-col rounded-2xl border border-line/60 bg-main shadow-soft"
       :class="sizeClass"
       role="dialog"
       aria-modal="true"
@@ -20,7 +20,7 @@
         </h3>
         <button
           type="button"
-          class="rounded-lg p-1 text-muted hover:bg-surface"
+          class="rounded-lg p-1 text-muted transition hover:bg-accent-soft"
           aria-label="닫기"
           @click="emit('close')"
         >

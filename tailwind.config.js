@@ -17,6 +17,8 @@ export default {
         'like-soft': 'var(--color-like-soft)',
         warm: 'var(--color-warm)',
         'warm-ink': 'var(--color-warm-ink)',
+        'on-accent': 'var(--color-on-accent)',
+        scrim: 'var(--color-scrim)',
       },
       fontFamily: {
         display: ['YeogiOttaeJalnan', 'sans-serif'],

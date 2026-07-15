@@ -39,7 +39,7 @@ const isNativeButton = computed(() => props.tag === 'button')
 
 const variantClass = computed(() => {
   const map = {
-    primary: 'bg-accent text-main hover:brightness-110 shadow-soft',
+    primary: 'bg-accent text-on-accent hover:brightness-110 shadow-soft',
     secondary: 'bg-accent-soft text-ink hover:bg-main',
     ghost: 'bg-transparent text-ink hover:bg-accent-soft',
     danger: 'bg-danger text-ink hover:brightness-105',
