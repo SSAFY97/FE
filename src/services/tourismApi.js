@@ -1,36 +1,43 @@
+import { locationApi } from '@/api/locationApi'
 import { TOUR_CATEGORIES, SEOUL_CITY_HALL } from '@/constants/tourism'
 import { haversineKm } from '@/utils/hash'
 
-const cache = new Map()
+/** @type {import('@/types/location.js').LocationListItem[] | null} */
+let cache = null
+/** @type {Promise<import('@/types/location.js').LocationListItem[]> | null} */
+let loading = null
 
-function fileForCategory(category) {
-  const found = TOUR_CATEGORIES.find((c) => c.key === category)
-  return found?.file ?? TOUR_CATEGORIES[0].file
+async function loadAll() {
+  if (cache) return cache
+  if (!loading) {
+    loading = locationApi.list().then((items) => {
+      cache = items
+      loading = null
+      return items
+    })
+  }
+  return loading
 }
 
-async function loadCategory(category) {
-  if (cache.has(category)) return cache.get(category)
-  const file = fileForCategory(category)
-  const res = await fetch(`/data/${file}`)
-  if (!res.ok) throw new Error(`Failed to load tourism data: ${category}`)
-  const json = await res.json()
-  const items = Array.isArray(json.items) ? json.items : []
-  cache.set(category, items)
-  return items
+function typeIdForCategory(category) {
+  return TOUR_CATEGORIES.find((c) => c.key === category)?.contentTypeId
 }
 
 /**
- * tourismApi — local JSON via fetch (ready to swap for real API).
+ * tourismApi — uses GET /api/locations with client-side filter/sort.
  */
 export const tourismApi = {
   async getByCategory(category) {
-    return loadCategory(category)
+    const items = await loadAll()
+    const typeId = typeIdForCategory(category)
+    if (!typeId) return items
+    return items.filter((item) => String(item.contenttypeid) === String(typeId))
   },
 
   async getPreview(category, limit = 8) {
-    const items = await loadCategory(category)
+    const items = await this.getByCategory(category)
     return items
-      .filter((item) => item.firstimage)
+      .filter((item) => item.firstimage || item.firstimage2)
       .slice(0, limit)
   },
 
@@ -42,12 +49,9 @@ export const tourismApi = {
   } = {}) {
     let items = []
     if (category === '전체') {
-      const batches = await Promise.all(
-        TOUR_CATEGORIES.map((c) => loadCategory(c.key)),
-      )
-      items = batches.flat()
+      items = [...(await loadAll())]
     } else {
-      items = await loadCategory(category)
+      items = await this.getByCategory(category)
     }
 
     const q = query.trim().toLowerCase()
@@ -80,7 +84,9 @@ export const tourismApi = {
       })
     } else {
       sorted.sort((a, b) =>
-        (b.modifiedtime || '').localeCompare(a.modifiedtime || ''),
+        (b.modifiedtime || b.createdtime || '').localeCompare(
+          a.modifiedtime || a.createdtime || '',
+        ),
       )
     }
 

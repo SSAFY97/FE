@@ -4,10 +4,7 @@
     class="flex items-center justify-between gap-4 border-b border-line/70 px-2 py-4 transition hover:bg-main"
   >
     <div class="min-w-0 flex-1">
-      <p class="truncate text-sm text-ink">
-        {{ post.title }}
-        <span class="text-muted">[{{ post.commentCount ?? 0 }}]</span>
-      </p>
+      <p class="truncate text-sm text-ink">{{ post.title }}</p>
       <p class="mt-1 text-xs text-muted">
         {{ post.author }} · {{ formatDate(post.createdAt) }}
       </p>

@@ -27,7 +27,6 @@
             <BaseIcon name="eye" :size="16" />
             {{ post.views }}
           </span>
-          <span>댓글 {{ post.commentCount ?? 0 }}</span>
         </div>
 
         <div class="mt-6 whitespace-pre-wrap text-sm leading-7 text-ink">
@@ -41,32 +40,6 @@
           <BaseButton variant="danger" @click="pwOpen = true">삭제</BaseButton>
         </div>
       </div>
-
-      <section class="mt-6 rounded-2xl bg-main p-5 shadow-soft">
-        <h2 class="mb-4 text-lg text-ink">댓글</h2>
-        <ul class="mb-5 space-y-3">
-          <li
-            v-for="c in post.comments || []"
-            :key="c.id"
-            class="rounded-xl bg-surface px-3 py-2"
-          >
-            <p class="text-sm text-ink">{{ c.content }}</p>
-            <p class="mt-1 text-xs text-muted">
-              {{ c.author }} · {{ formatDate(c.createdAt) }}
-            </p>
-          </li>
-          <li v-if="!(post.comments || []).length" class="text-sm text-muted">
-            아직 댓글이 없습니다.
-          </li>
-        </ul>
-
-        <form class="flex flex-col gap-2 sm:flex-row" @submit.prevent="addComment">
-          <BaseInput v-model="commentAuthor" placeholder="닉네임" class="sm:w-32" />
-          <BaseInput v-model="commentContent" placeholder="댓글 내용" class="flex-1" />
-          <BaseButton type="submit" :loading="commentLoading">등록</BaseButton>
-        </form>
-        <p v-if="commentError" class="mt-2 text-sm text-danger">{{ commentError }}</p>
-      </section>
     </article>
 
     <BaseModal :open="pwOpen" title="비밀번호 확인" @close="pwOpen = false">
@@ -106,10 +79,6 @@ const pwOpen = ref(false)
 const password = ref('')
 const deleting = ref(false)
 const deleteError = ref('')
-const commentAuthor = ref('')
-const commentContent = ref('')
-const commentLoading = ref(false)
-const commentError = ref('')
 
 onMounted(async () => {
   try {
@@ -142,22 +111,6 @@ async function onDelete() {
         : '삭제에 실패했습니다.'
   } finally {
     deleting.value = false
-  }
-}
-
-async function addComment() {
-  commentError.value = ''
-  commentLoading.value = true
-  try {
-    post.value = await postApi.addComment(route.params.id, {
-      author: commentAuthor.value,
-      content: commentContent.value,
-    })
-    commentContent.value = ''
-  } catch {
-    commentError.value = '댓글을 등록할 수 없습니다.'
-  } finally {
-    commentLoading.value = false
   }
 }
 </script>
