@@ -21,6 +21,13 @@
           관광정보
         </RouterLink>
         <RouterLink
+          to="/directions"
+          class="rounded-xl px-3 py-2 text-sm text-ink/80 transition hover:bg-accent-soft hover:text-ink"
+          active-class="bg-accent-soft !text-ink"
+        >
+          길찾기
+        </RouterLink>
+        <RouterLink
           to="/community"
           class="rounded-xl px-3 py-2 text-sm text-ink/80 transition hover:bg-accent-soft hover:text-ink"
           active-class="bg-accent-soft !text-ink"

@@ -155,3 +155,34 @@ request body
 - DELETE
 - /api/posts/{id}
 
+## 보행자 길찾기
+- POST
+- /api/routes/pedestrian
+
+BE는 Tmap 보행자 경로 API를 호출한 뒤, FE에 필요한 필드만 내려준다.
+
+request body
+{
+	"startX": 126.978,
+	"startY": 37.5665,
+	"endX": 126.99,
+	"endY": 37.57,
+	"startName": "현위치",
+	"endName": "경복궁"
+}
+
+response body (data 부분)
+{
+	"totalDistance": 632,
+	"totalTime": 513,
+	"points": [
+		{ "lat": 37.5567, "lng": 126.9236 }
+	]
+}
+
+- startX / endX: 경도 (WGS84)
+- startY / endY: 위도 (WGS84)
+- totalDistance: 미터 (Tmap 첫 Point feature properties)
+- totalTime: 초 (Tmap 첫 Point feature properties)
+- points: LineString 좌표를 순서대로 합친 WGS84 { lat, lng } 배열
+
