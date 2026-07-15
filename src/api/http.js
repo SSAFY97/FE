@@ -2,7 +2,13 @@
  * @typedef {import('@/types/common.js').ApiResponse} ApiResponse
  */
 
+/**
+ * 브라우저는 항상 상대경로 `/api` 로 요청합니다.
+ * - 로컬: vite.config.js 가 VITE_API_TARGET 으로 proxy
+ * - Netlify: netlify.toml 이 /api → 백엔드로 proxy
+ */
 const BASE = '/api'
+
 
 /**
  * @param {string} method
