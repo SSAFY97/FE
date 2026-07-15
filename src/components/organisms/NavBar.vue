@@ -9,13 +9,6 @@
         to="/"
         class="flex items-center gap-2 text-lg tracking-tight text-ink transition hover:text-accent"
       >
-        <img
-          src="/seouleum.png"
-          alt=""
-          class="h-7 w-7 object-contain sm:h-8 sm:w-8"
-          width="32"
-          height="32"
-        />
         서울이음
       </RouterLink>
 

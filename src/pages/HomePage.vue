@@ -12,13 +12,6 @@
     <div class="relative z-10 flex flex-col gap-12 pb-16 pt-24 sm:pt-28">
       <div class="mx-auto max-w-3xl px-4 text-center">
         <div class="flex items-center justify-center gap-3">
-          <img
-            src="/seouleum.png"
-            alt=""
-            class="h-10 w-10 object-contain sm:h-12 sm:w-12"
-            width="48"
-            height="48"
-          />
           <p class="font-display text-3xl text-ink sm:text-4xl">서울이음</p>
         </div>
         <p class="mt-3 text-sm text-muted sm:text-base">
