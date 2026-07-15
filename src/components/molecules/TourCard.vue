@@ -15,7 +15,7 @@
     <div
       class="flex h-24 w-full shrink-0 flex-col justify-center gap-1 overflow-hidden px-3"
     >
-      <h3 class="truncate text-sm leading-5 text-ink">{{ title }}</h3>
+      <h3 class="truncate text-sm font-bold leading-5 text-ink">{{ title }}</h3>
       <p class="truncate text-xs leading-4 text-muted">
         {{ address || '주소 정보 없음' }}
       </p>

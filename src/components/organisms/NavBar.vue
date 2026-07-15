@@ -3,9 +3,19 @@
     class="fixed left-1/2 top-3 z-40 w-full max-w-5xl -translate-x-1/2 px-4"
   >
     <div
-      class="flex h-14 items-center justify-between rounded-2xl border border-line/70 bg-main px-4 shadow-soft backdrop-blur-sm sm:px-6"
+      class="flex h-14 items-center justify-between rounded-2xl border border-line/70 bg-main px-4 font-display shadow-soft backdrop-blur-sm sm:px-6"
     >
-      <RouterLink to="/" class="text-lg tracking-tight text-ink transition hover:text-accent">
+      <RouterLink
+        to="/"
+        class="flex items-center gap-2 text-lg tracking-tight text-ink transition hover:text-accent"
+      >
+        <img
+          src="/seouleum.png"
+          alt=""
+          class="h-7 w-7 object-contain sm:h-8 sm:w-8"
+          width="32"
+          height="32"
+        />
         서울이음
       </RouterLink>
 

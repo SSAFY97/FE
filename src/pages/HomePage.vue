@@ -11,7 +11,16 @@
 
     <div class="relative z-10 flex flex-col gap-12 pb-16 pt-24 sm:pt-28">
       <div class="mx-auto max-w-3xl px-4 text-center">
-        <p class="text-3xl text-ink sm:text-4xl">서울이음</p>
+        <div class="flex items-center justify-center gap-3">
+          <img
+            src="/seouleum.png"
+            alt=""
+            class="h-10 w-10 object-contain sm:h-12 sm:w-12"
+            width="48"
+            height="48"
+          />
+          <p class="font-display text-3xl text-ink sm:text-4xl">서울이음</p>
+        </div>
         <p class="mt-3 text-sm text-muted sm:text-base">
           서울의 관광 정보와 여행자들의 이야기를 한곳에서
         </p>
@@ -25,6 +34,8 @@
         :loading="previewLoading"
         @select="onSelectTab"
         @select-item="openTourDetail"
+        @pause="pauseTimer"
+        @resume="resumeTimer"
       />
 
       <HotPostList :posts="hotPosts" />
@@ -61,7 +72,15 @@ const heroStyle = computed(() => ({
   backgroundImage: `url('${isDark.value ? '/hero_dark.webp' : '/hero_light.webp'}')`,
 }))
 let timer = null
+let paused = false
 let loadSeq = 0
+
+function prefersReducedMotion() {
+  return (
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
+}
 
 function openTourDetail(id) {
   selectedLocationId.value = id
@@ -102,12 +121,30 @@ function nextTab() {
 function onSelectTab(key) {
   if (key === activeTab.value) return
   loadPreview(key)
-  resetTimer()
+  if (!paused) resetTimer()
+}
+
+function clearTimer() {
+  if (timer) {
+    clearInterval(timer)
+    timer = null
+  }
 }
 
 function resetTimer() {
-  if (timer) clearInterval(timer)
+  clearTimer()
+  if (prefersReducedMotion() || paused) return
   timer = setInterval(nextTab, 5000)
+}
+
+function pauseTimer() {
+  paused = true
+  clearTimer()
+}
+
+function resumeTimer() {
+  paused = false
+  resetTimer()
 }
 
 onMounted(async () => {
@@ -121,7 +158,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  if (timer) clearInterval(timer)
+  clearTimer()
 })
 </script>
 

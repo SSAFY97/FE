@@ -5,7 +5,7 @@
   >
     <BaseBadge tone="hot">HOT</BaseBadge>
     <div class="min-w-0 flex-1">
-      <p class="truncate text-sm text-ink">{{ post.title }}</p>
+      <p class="truncate text-sm font-bold text-ink">{{ post.title }}</p>
       <p class="mt-0.5 text-xs text-muted">{{ post.author }}</p>
     </div>
     <div class="flex shrink-0 gap-3 text-xs text-muted">

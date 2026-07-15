@@ -1,9 +1,13 @@
 <template>
   <div
     v-if="open"
-    class="pointer-events-none fixed inset-0 z-50"
+    class="fixed inset-0 z-50"
   >
-    <div class="absolute inset-0 bg-ink/20" />
+    <div
+      class="absolute inset-0 bg-ink/20"
+      aria-hidden="true"
+      @click="emit('close')"
+    />
     <div
       class="pointer-events-auto animate-scale-in absolute right-3 top-16 flex h-[min(560px,70vh)] w-[min(380px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-line/70 bg-surface shadow-soft sm:right-6"
       role="dialog"
@@ -18,7 +22,7 @@
           type="button"
           class="rounded-lg p-1 text-muted hover:bg-main"
           aria-label="닫기"
-          @click="$emit('close')"
+          @click="emit('close')"
         >
           <BaseIcon name="x" :size="18" />
         </button>
@@ -31,7 +35,15 @@
           :role="msg.role"
           :text="msg.text"
         />
-        <ChatBubble v-if="sending" role="bot" text="입력 중…" />
+        <div
+          v-if="sending"
+          class="mr-auto flex max-w-[85%] items-center gap-1 rounded-2xl bg-main px-3.5 py-3 shadow-soft"
+          aria-label="입력 중"
+        >
+          <span class="typing-dot" />
+          <span class="typing-dot" />
+          <span class="typing-dot" />
+        </div>
       </div>
 
       <form
@@ -54,7 +66,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, onUnmounted } from 'vue'
 import ChatBubble from '@/components/molecules/ChatBubble.vue'
 import BaseButton from '@/components/atoms/BaseButton.vue'
 import BaseIcon from '@/components/atoms/BaseIcon.vue'
@@ -64,7 +76,7 @@ const props = defineProps({
   open: Boolean,
 })
 
-defineEmits(['close'])
+const emit = defineEmits(['close'])
 
 const messages = ref([
   {
@@ -83,12 +95,25 @@ async function scrollBottom() {
   }
 }
 
+function onKeydown(e) {
+  if (e.key === 'Escape') emit('close')
+}
+
 watch(
   () => props.open,
   (v) => {
-    if (v) scrollBottom()
+    if (v) {
+      scrollBottom()
+      window.addEventListener('keydown', onKeydown)
+    } else {
+      window.removeEventListener('keydown', onKeydown)
+    }
   },
 )
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeydown)
+})
 
 async function onSend() {
   const text = draft.value.trim()
@@ -114,3 +139,42 @@ async function onSend() {
   }
 }
 </script>
+
+<style scoped>
+.typing-dot {
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: var(--color-muted);
+  animation: typing-bounce 1s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes typing-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  30% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typing-dot {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+</style>

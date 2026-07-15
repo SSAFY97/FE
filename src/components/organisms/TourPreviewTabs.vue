@@ -1,5 +1,11 @@
 <template>
-  <section class="mx-auto w-full max-w-5xl animate-fade-in px-4">
+  <section
+    class="mx-auto w-full max-w-5xl animate-fade-in px-4"
+    @mouseenter="$emit('pause')"
+    @mouseleave="$emit('resume')"
+    @focusin="$emit('pause')"
+    @focusout="onFocusOut"
+  >
     <div class="overflow-hidden rounded-3xl bg-main p-4 shadow-soft sm:p-6">
       <div class="mb-4 flex gap-1 overflow-x-auto pb-1" role="tablist">
         <button
@@ -54,11 +60,38 @@
           </div>
         </Transition>
       </div>
+
+      <div
+        v-if="tabs.length"
+        class="mt-4 flex items-center justify-center gap-1.5"
+        aria-hidden="true"
+      >
+        <span
+          v-for="tab in tabs"
+          :key="tab.key"
+          class="h-1.5 rounded-full transition-all duration-300"
+          :class="
+            tab.key === active
+              ? 'w-5 bg-accent'
+              : 'w-1.5 bg-line'
+          "
+        />
+      </div>
+
+      <div class="mt-4 text-center">
+        <RouterLink
+          to="/tourism"
+          class="text-sm text-accent transition hover:underline"
+        >
+          관광정보 전체 보기
+        </RouterLink>
+      </div>
     </div>
   </section>
 </template>
 
 <script setup>
+import { RouterLink } from 'vue-router'
 import TourCard from '@/components/molecules/TourCard.vue'
 import StateMessage from '@/components/molecules/StateMessage.vue'
 
@@ -70,7 +103,14 @@ defineProps({
   loading: Boolean,
 })
 
-defineEmits(['select', 'select-item'])
+const emit = defineEmits(['select', 'select-item', 'pause', 'resume'])
+
+function onFocusOut(e) {
+  const root = e.currentTarget
+  if (root && !root.contains(e.relatedTarget)) {
+    emit('resume')
+  }
+}
 </script>
 
 <style scoped>
@@ -93,5 +133,12 @@ defineEmits(['select', 'select-item'])
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: none;
+  }
 }
 </style>

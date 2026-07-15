@@ -10,6 +10,54 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2')
+    format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2')
+    format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2')
+    format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2')
+    format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2')
+    format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2')
+    format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+
 :root {
   /* fallback 색상(OKLCH 미지원 브라우저 대비) */
   --color-main: #ffffff;
@@ -21,6 +69,8 @@
   --color-line: #d3d6e2;
   --color-danger: #df9c90;
   --color-danger-soft: #f6e9e4;
+  --color-like: #d4788a;
+  --color-like-soft: #f8e8ec;
   --color-warm: #f1e0bf;
   --color-warm-ink: #7c5b36;
 
@@ -34,6 +84,8 @@
   --color-line: oklch(84% 0.022 278);
   --color-danger: oklch(72% 0.08 16);
   --color-danger-soft: oklch(92% 0.03 12);
+  --color-like: oklch(65% 0.12 8);
+  --color-like-soft: oklch(94% 0.025 8);
   --color-warm: oklch(89% 0.05 58);
   --color-warm-ink: oklch(49% 0.08 42);
 }
@@ -49,6 +101,8 @@ html[data-theme='dark'] {
   --color-line: #3b4058;
   --color-danger: #e2a59b;
   --color-danger-soft: #4a2f33;
+  --color-like: #e8a0b0;
+  --color-like-soft: #4a3038;
   --color-warm: #5c4c36;
   --color-warm-ink: #f4dcc1;
 
@@ -61,6 +115,8 @@ html[data-theme='dark'] {
   --color-line: oklch(43% 0.02 275);
   --color-danger: oklch(73% 0.075 20);
   --color-danger-soft: oklch(38% 0.045 20);
+  --color-like: oklch(78% 0.09 8);
+  --color-like-soft: oklch(35% 0.04 8);
   --color-warm: oklch(41% 0.04 64);
   --color-warm-ink: oklch(87% 0.05 66);
 }
@@ -112,5 +168,16 @@ html[data-theme='dark'] {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

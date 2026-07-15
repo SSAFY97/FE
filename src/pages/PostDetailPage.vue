@@ -9,7 +9,7 @@
       </div>
 
       <div class="rounded-2xl bg-main p-6 shadow-soft">
-        <h1 class="text-2xl text-ink">{{ post.title }}</h1>
+        <h1 class="text-2xl font-bold text-ink">{{ post.title }}</h1>
         <p class="mt-2 text-sm text-muted">
           {{ post.author }} · {{ formatDate(post.createdAt) }}
         </p>
@@ -17,7 +17,7 @@
           <button
             type="button"
             class="inline-flex items-center gap-1 rounded-lg px-2 py-1 transition hover:bg-accent-soft"
-            :class="post.liked ? 'text-danger' : ''"
+            :class="post.liked ? 'text-like' : ''"
             @click="toggleLike"
           >
             <BaseIcon name="heart" :size="16" />
@@ -29,7 +29,7 @@
           </span>
         </div>
 
-        <div class="mt-6 whitespace-pre-wrap text-sm leading-7 text-ink">
+        <div class="mt-6 whitespace-pre-wrap text-base leading-7 text-ink">
           {{ post.content }}
         </div>
 

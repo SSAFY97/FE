@@ -4,7 +4,7 @@
     class="flex items-center justify-between gap-4 rounded-2xl bg-main px-4 py-5 shadow-soft transition hover:brightness-[1.02]"
   >
     <div class="min-w-0 flex-1">
-      <p class="truncate text-sm text-ink">{{ post.title }}</p>
+      <p class="truncate text-sm font-bold text-ink">{{ post.title }}</p>
       <p class="mt-1.5 text-xs text-muted">
         {{ post.author }} · {{ formatDate(post.createdAt) }}
       </p>

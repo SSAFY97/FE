@@ -13,12 +13,14 @@ export default {
         line: 'var(--color-line)',
         danger: 'var(--color-danger)',
         'danger-soft': 'var(--color-danger-soft)',
+        like: 'var(--color-like)',
+        'like-soft': 'var(--color-like-soft)',
         warm: 'var(--color-warm)',
         'warm-ink': 'var(--color-warm-ink)',
       },
       fontFamily: {
         display: ['YeogiOttaeJalnan', 'sans-serif'],
-        sans: ['YeogiOttaeJalnan', 'Pretendard', 'sans-serif'],
+        sans: ['Paperlogy', 'sans-serif'],
       },
       boxShadow: {
         soft: '0 10px 28px -14px color-mix(in oklab, var(--color-ink) 22%, transparent)',
