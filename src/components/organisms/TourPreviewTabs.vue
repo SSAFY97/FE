@@ -33,12 +33,11 @@
         <Transition v-else name="fade" mode="out-in">
           <div
             :key="contentKey"
-            class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+            class="grid grid-cols-2 items-start gap-3 sm:grid-cols-4"
           >
             <TourCard
               v-for="item in items"
               :key="item.contentid"
-              class="h-60"
               :title="item.title"
               :address="item.addr1"
               :image="item.firstimage2 || item.firstimage"

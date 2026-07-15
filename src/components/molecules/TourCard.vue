@@ -1,30 +1,29 @@
 <template>
   <article
-    class="group flex h-full min-h-[240px] flex-col overflow-hidden rounded-2xl bg-main shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+    class="group flex h-60 w-full flex-col overflow-hidden rounded-2xl bg-main shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-lg"
   >
-    <div class="relative h-[60%] min-h-[144px] flex-[3] overflow-hidden bg-accent-soft">
-      <img
-        v-if="image"
+    <div class="h-36 w-full shrink-0 overflow-hidden bg-accent-soft">
+      <BaseImage
         :src="image"
         :alt="title"
-        class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        class="block h-full w-full object-cover transition duration-500 group-hover:scale-105"
         loading="lazy"
       />
-      <div
-        v-else
-        class="flex h-full items-center justify-center text-sm text-muted"
-      >
-        이미지 없음
-      </div>
     </div>
-    <div class="flex flex-[2] flex-col gap-1 p-3">
-      <h3 class="line-clamp-2 text-sm text-ink">{{ title }}</h3>
-      <p class="line-clamp-2 text-xs text-muted">{{ address || '주소 정보 없음' }}</p>
+    <div
+      class="flex h-24 w-full shrink-0 flex-col justify-center gap-1 overflow-hidden px-3"
+    >
+      <h3 class="truncate text-sm leading-5 text-ink">{{ title }}</h3>
+      <p class="truncate text-xs leading-4 text-muted">
+        {{ address || '주소 정보 없음' }}
+      </p>
     </div>
   </article>
 </template>
 
 <script setup>
+import BaseImage from '@/components/atoms/BaseImage.vue'
+
 defineProps({
   title: { type: String, default: '' },
   address: { type: String, default: '' },
