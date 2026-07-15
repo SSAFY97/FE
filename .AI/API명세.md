@@ -159,30 +159,43 @@ request body
 - POST
 - /api/routes/pedestrian
 
-BE는 Tmap 보행자 경로 API를 호출한 뒤, FE에 필요한 필드만 내려준다.
-
 request body
 {
-	"startX": 126.978,
-	"startY": 37.5665,
-	"endX": 126.99,
-	"endY": 37.57,
-	"startName": "현위치",
-	"endName": "경복궁"
+	"origin": {
+		"name": "효사정",
+		"latitude": 37.5106694129,
+		"longitude": 126.9627647192
+	},
+	"destination": {
+		"name": "용양봉저정공원",
+		"latitude": 37.5118,
+		"longitude": 126.9585
+	}
 }
 
 response body (data 부분)
 {
-	"totalDistance": 632,
-	"totalTime": 513,
-	"points": [
-		{ "lat": 37.5567, "lng": 126.9236 }
+	"origin": {
+		"name": "효사정",
+		"latitude": 37.5106694129,
+		"longitude": 126.9627647192
+	},
+	"destination": {
+		"name": "용양봉저정공원",
+		"latitude": 37.5118,
+		"longitude": 126.9585
+	},
+	"straight_line_distance_meters": 397,
+	"distance_meters": 1087,
+	"duration_seconds": 913,
+	"path": [
+		{ "latitude": 37.51086, "longitude": 126.96296 }
 	]
 }
 
-- startX / endX: 경도 (WGS84)
-- startY / endY: 위도 (WGS84)
-- totalDistance: 미터 (Tmap 첫 Point feature properties)
-- totalTime: 초 (Tmap 첫 Point feature properties)
-- points: LineString 좌표를 순서대로 합친 WGS84 { lat, lng } 배열
+- origin / destination: 출발·도착 장소명과 WGS84 위경도
+- straight_line_distance_meters: 직선 거리(m)
+- distance_meters: 도보 경로 거리(m)
+- duration_seconds: 예상 소요 시간(초)
+- path: 경로 좌표 배열 (latitude, longitude)
 

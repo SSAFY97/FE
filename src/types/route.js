@@ -1,18 +1,22 @@
 /**
  * @typedef {{ lat: number, lng: number }} RoutePoint
  *
+ * @typedef {Object} RoutePlace
+ * @property {string} name
+ * @property {number} latitude
+ * @property {number} longitude
+ *
  * @typedef {Object} PedestrianRouteRequest
- * @property {number} startX
- * @property {number} startY
- * @property {number} endX
- * @property {number} endY
- * @property {string} [startName]
- * @property {string} [endName]
+ * @property {RoutePlace} origin
+ * @property {RoutePlace} destination
  *
  * @typedef {Object} PedestrianRoute
- * @property {number} totalDistance - meters
- * @property {number} totalTime - seconds
- * @property {RoutePoint[]} points
+ * @property {RoutePlace} origin
+ * @property {RoutePlace} destination
+ * @property {number} [straightLineDistanceMeters]
+ * @property {number} distanceMeters
+ * @property {number} durationSeconds
+ * @property {RoutePoint[]} path
  */
 
 export {}

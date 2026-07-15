@@ -129,7 +129,8 @@ const error = ref('')
 const page = ref(1)
 const tourModalOpen = ref(false)
 const selectedLocationId = ref('')
-const { position, ready, status, requestLocation } = useGeolocation()
+const { position, ready, status, requestLocation, positionOrDefault } =
+  useGeolocation()
 
 const categoryOptions = [
   { value: '전체', label: '전체' },
@@ -219,7 +220,7 @@ async function load() {
       category: category.value,
       query: query.value,
       sort: sort.value,
-      userPos: position.value,
+      userPos: positionOrDefault(),
     })
     if (page.value > totalPages.value) page.value = 1
   } catch {

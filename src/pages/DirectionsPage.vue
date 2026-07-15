@@ -13,25 +13,26 @@
       @search="onSearch"
     />
 
-    <p
-      v-if="loading"
-      class="mt-4 text-xs text-muted"
-    >
-      경로를 찾는 중…
+    <p v-if="loading" class="mt-4 text-xs text-muted">경로를 찾는 중…</p>
+    <p v-else-if="status === 'pending'" class="mt-4 text-xs text-muted">
+      현위치를 확인하는 중…
     </p>
-
-    <p
-      v-if="geoBanner"
-      class="mt-4 rounded-xl bg-accent-soft px-3 py-2 text-xs text-ink"
-    >
-      {{ geoBanner }}
+    <p v-else-if="!position" class="mt-4 text-xs text-muted">
+      현위치를 찾지 못했습니다. 지도를 클릭해 출발지를 지정하세요.
+    </p>
+    <p v-else class="mt-4 text-xs text-muted">
+      출발: 현위치 · 지도 클릭으로 수정 가능
     </p>
 
     <div
       v-if="destination || routeSummary"
       class="mt-4 rounded-xl border border-line/70 bg-main px-4 py-3 text-sm text-ink"
     >
-      <p v-if="destination">
+      <p>
+        <span class="text-muted">출발</span>
+        현위치
+      </p>
+      <p v-if="destination" class="mt-1">
         <span class="text-muted">도착</span>
         {{ destination.title }}
         <span v-if="destination.addr1" class="text-muted">
@@ -56,9 +57,10 @@
     <div class="mt-5 h-[min(70vh,36rem)]">
       <KakaoMapView
         :center="mapCenter"
-        :start="mapStart"
+        :start="position"
         :end="mapEnd"
         :path="routePath"
+        @pick-origin="onPickOrigin"
       />
     </div>
   </PageShell>
@@ -86,14 +88,10 @@ const routePath = ref([])
 const totalDistance = ref(0)
 const totalTime = ref(0)
 
-const { position, ready, status, requestLocation } = useGeolocation()
+const { position, status, ensureLocation, setPosition } = useGeolocation()
 
 const mapCenter = computed(() =>
-  ready.value ? { ...position.value } : { ...SEOUL_CITY_HALL },
-)
-
-const mapStart = computed(() =>
-  ready.value ? { ...position.value } : { ...SEOUL_CITY_HALL },
+  position.value ? { ...position.value } : { ...SEOUL_CITY_HALL },
 )
 
 const mapEnd = computed(() => {
@@ -102,17 +100,6 @@ const mapEnd = computed(() => {
   const lng = parseFloat(destination.value.mapx)
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
   return { lat, lng }
-})
-
-const geoBanner = computed(() => {
-  if (status.value === 'pending') return '위치를 확인하는 중…'
-  if (status.value === 'denied') {
-    return '위치 권한이 없어 서울시청을 출발지로 사용합니다.'
-  }
-  if (status.value === 'unsupported') {
-    return '이 브라우저는 위치 정보를 지원하지 않아 서울시청을 출발지로 사용합니다.'
-  }
-  return ''
 })
 
 const routeSummary = computed(() => {
@@ -126,8 +113,18 @@ const routeSummary = computed(() => {
 })
 
 onMounted(() => {
-  requestLocation()
+  void ensureLocation({ force: true })
 })
+
+/**
+ * @param {{ lat: number, lng: number }} point
+ */
+function onPickOrigin(point) {
+  setPosition(point)
+  clearRoute()
+  error.value = ''
+  errorDetail.value = ''
+}
 
 function clearRoute() {
   destination.value = null
@@ -150,7 +147,18 @@ async function onSearch() {
   clearRoute()
 
   try {
-    const userPos = ready.value ? position.value : SEOUL_CITY_HALL
+    if (!position.value) {
+      await ensureLocation({ force: true })
+    }
+
+    if (!position.value) {
+      error.value = '출발지가 없습니다'
+      errorDetail.value = '지도를 클릭해 출발지를 지정해 주세요.'
+      return
+    }
+
+    const userPos = { lat: position.value.lat, lng: position.value.lng }
+
     const items = await tourismApi.search({
       query: q,
       sort: 'distance',
@@ -170,27 +178,29 @@ async function onSearch() {
     }
 
     destination.value = place
-    const endLat = parseFloat(place.mapy)
-    const endLng = parseFloat(place.mapx)
 
     const route = await routeApi.getPedestrian({
-      startX: userPos.lng,
-      startY: userPos.lat,
-      endX: endLng,
-      endY: endLat,
-      startName: '현위치',
-      endName: place.title || '도착지',
+      origin: {
+        name: '현위치',
+        latitude: userPos.lat,
+        longitude: userPos.lng,
+      },
+      destination: {
+        name: place.title || '도착지',
+        latitude: parseFloat(place.mapy),
+        longitude: parseFloat(place.mapx),
+      },
     })
 
-    if (!route.points?.length) {
+    if (!route.path?.length) {
       error.value = '경로를 찾지 못했습니다'
       errorDetail.value = '다른 도착지를 검색해 보세요.'
       return
     }
 
-    routePath.value = route.points
-    totalDistance.value = route.totalDistance
-    totalTime.value = route.totalTime
+    routePath.value = route.path
+    totalDistance.value = route.distanceMeters
+    totalTime.value = route.durationSeconds
   } catch (err) {
     error.value = '길찾기에 실패했습니다'
     errorDetail.value = err?.message || '잠시 후 다시 시도해 주세요.'

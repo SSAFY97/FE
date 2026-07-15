@@ -3,25 +3,37 @@ import { SEOUL_CITY_HALL } from '@/constants/tourism'
 
 /** @typedef {'idle' | 'pending' | 'granted' | 'denied' | 'unsupported'} GeoStatus */
 
-const position = ref({ ...SEOUL_CITY_HALL })
+/** @type {import('vue').Ref<{ lat: number, lng: number } | null>} */
+const position = ref(null)
 const ready = ref(false)
 /** @type {import('vue').Ref<GeoStatus>} */
 const status = ref('idle')
-let requested = false
 
-export function useGeolocation() {
-  function requestLocation() {
-    if (requested) return
-    requested = true
+/** @type {Promise<{ lat: number, lng: number } | null> | null} */
+let pending = null
 
-    if (!navigator.geolocation) {
-      status.value = 'unsupported'
-      position.value = { ...SEOUL_CITY_HALL }
-      ready.value = true
-      return
-    }
+/**
+ * @param {{ force?: boolean }} [options]
+ * @returns {Promise<{ lat: number, lng: number } | null>}
+ */
+function ensureLocation(options = {}) {
+  const { force = false } = options
 
-    status.value = 'pending'
+  if (!force && status.value === 'granted' && position.value) {
+    return Promise.resolve({ ...position.value })
+  }
+  if (pending) return pending
+
+  if (!navigator.geolocation) {
+    status.value = 'unsupported'
+    ready.value = true
+    position.value = null
+    return Promise.resolve(null)
+  }
+
+  status.value = 'pending'
+
+  pending = new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         position.value = {
@@ -30,15 +42,54 @@ export function useGeolocation() {
         }
         status.value = 'granted'
         ready.value = true
+        pending = null
+        resolve({ ...position.value })
       },
       () => {
-        position.value = { ...SEOUL_CITY_HALL }
         status.value = 'denied'
         ready.value = true
+        // 실패해도 이전 좌표가 있으면 유지
+        pending = null
+        resolve(position.value ? { ...position.value } : null)
       },
-      { timeout: 5000 },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0,
+      },
     )
+  })
+
+  return pending
+}
+
+/**
+ * @param {{ lat: number, lng: number }} point
+ */
+function setPosition(point) {
+  position.value = { lat: point.lat, lng: point.lng }
+  status.value = 'granted'
+  ready.value = true
+}
+
+function positionOrDefault() {
+  return position.value ? { ...position.value } : { ...SEOUL_CITY_HALL }
+}
+
+export function useGeolocation() {
+  function requestLocation() {
+    void ensureLocation({ force: false })
   }
 
-  return { position, ready, status, requestLocation }
+  return {
+    position,
+    ready,
+    status,
+    requestLocation,
+    ensureLocation,
+    setPosition,
+    /** @deprecated use setPosition */
+    setManualPosition: setPosition,
+    positionOrDefault,
+  }
 }

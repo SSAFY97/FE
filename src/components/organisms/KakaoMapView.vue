@@ -38,7 +38,14 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  /** 지도 클릭으로 출발지 지정 */
+  pickOrigin: {
+    type: Boolean,
+    default: true,
+  },
 })
+
+const emit = defineEmits(['pick-origin'])
 
 const mapEl = ref(null)
 const statusMessage = ref('지도를 불러오는 중…')
@@ -55,6 +62,8 @@ let polyline = null
 let mapsApi = null
 /** @type {ResizeObserver | null} */
 let resizeObserver = null
+/** @type {((e: any) => void) | null} */
+let clickHandler = null
 
 function toLatLng(point) {
   return new mapsApi.LatLng(point.lat, point.lng)
@@ -62,6 +71,7 @@ function toLatLng(point) {
 
 function clearOverlays() {
   if (startMarker) {
+    mapsApi.event.removeListener(startMarker, 'dragend', onStartDragEnd)
     startMarker.setMap(null)
     startMarker = null
   }
@@ -75,6 +85,12 @@ function clearOverlays() {
   }
 }
 
+function onStartDragEnd() {
+  if (!startMarker) return
+  const latLng = startMarker.getPosition()
+  emit('pick-origin', { lat: latLng.getLat(), lng: latLng.getLng() })
+}
+
 function relayout() {
   if (!map) return
   map.relayout()
@@ -82,12 +98,12 @@ function relayout() {
     const bounds = new mapsApi.LatLngBounds()
     props.path.forEach((p) => bounds.extend(toLatLng(p)))
     if (props.end) bounds.extend(toLatLng(props.end))
-    const startPoint = props.start || props.center
-    if (startPoint) bounds.extend(toLatLng(startPoint))
+    if (props.start) bounds.extend(toLatLng(props.start))
     map.setBounds(bounds)
-  } else {
-    const center = props.center || SEOUL_CITY_HALL
-    map.setCenter(toLatLng(center))
+  } else if (props.start) {
+    map.setCenter(toLatLng(props.start))
+  } else if (props.center) {
+    map.setCenter(toLatLng(props.center))
   }
 }
 
@@ -96,13 +112,15 @@ function renderOverlays() {
 
   clearOverlays()
 
-  const startPoint = props.start || props.center
-  if (startPoint?.lat != null && startPoint?.lng != null) {
+  // 출발 마커는 신뢰된 좌표(start)가 있을 때만 — center(서울시청)로 대체하지 않음
+  if (props.start?.lat != null && props.start?.lng != null) {
     startMarker = new mapsApi.Marker({
-      position: toLatLng(startPoint),
+      position: toLatLng(props.start),
       map,
       title: '출발',
+      draggable: true,
     })
+    mapsApi.event.addListener(startMarker, 'dragend', onStartDragEnd)
   }
 
   if (props.end?.lat != null && props.end?.lng != null) {
@@ -127,11 +145,25 @@ function renderOverlays() {
     const bounds = new mapsApi.LatLngBounds()
     linePath.forEach((latLng) => bounds.extend(latLng))
     if (props.end) bounds.extend(toLatLng(props.end))
-    if (startPoint) bounds.extend(toLatLng(startPoint))
+    if (props.start) bounds.extend(toLatLng(props.start))
     map.setBounds(bounds)
-  } else if (startPoint) {
-    map.setCenter(toLatLng(startPoint))
+  } else if (props.start) {
+    map.setCenter(toLatLng(props.start))
   }
+}
+
+function bindClick() {
+  if (!map || !mapsApi) return
+  if (clickHandler) {
+    mapsApi.event.removeListener(map, 'click', clickHandler)
+    clickHandler = null
+  }
+  if (!props.pickOrigin) return
+  clickHandler = (mouseEvent) => {
+    const latLng = mouseEvent.latLng
+    emit('pick-origin', { lat: latLng.getLat(), lng: latLng.getLng() })
+  }
+  mapsApi.event.addListener(map, 'click', clickHandler)
 }
 
 function errorMessage(err) {
@@ -140,7 +172,7 @@ function errorMessage(err) {
     return '카카오맵 키가 설정되지 않았습니다. .env의 VITE_KAKAO_MAP_KEY를 확인하세요.'
   }
   if (/Unauthorized|401|403|도메인|domain|KAKAO_SDK_LOAD_FAILED/i.test(msg)) {
-    return '카카오맵 인증 실패(401). JavaScript 키인지, Web 플랫폼에 http://localhost:5173 도메인을 등록했는지 확인하세요.'
+    return '카카오맵 인증 실패. JavaScript 키와 도메인 등록을 확인하세요.'
   }
   return '지도를 불러오지 못했습니다. 키·도메인 등록 후 Vite를 재시작해 보세요.'
 }
@@ -153,11 +185,12 @@ async function initMap() {
 
     const center = props.center || SEOUL_CITY_HALL
     map = new mapsApi.Map(mapEl.value, {
-      center: toLatLng(center),
+      center: toLatLng(props.start || center),
       level: 5,
     })
     statusMessage.value = ''
     renderOverlays()
+    bindClick()
 
     await nextTick()
     relayout()
@@ -182,6 +215,9 @@ onBeforeUnmount(() => {
     resizeObserver.disconnect()
     resizeObserver = null
   }
+  if (map && mapsApi && clickHandler) {
+    mapsApi.event.removeListener(map, 'click', clickHandler)
+  }
   clearOverlays()
   map = null
 })
@@ -190,11 +226,16 @@ watch(
   () => [props.center, props.start, props.end, props.path],
   () => {
     if (!map) return
-    if (!props.path?.length && props.center) {
-      map.setCenter(toLatLng(props.center))
+    if (!props.path?.length && (props.start || props.center)) {
+      map.setCenter(toLatLng(props.start || props.center))
     }
     renderOverlays()
   },
   { deep: true },
+)
+
+watch(
+  () => props.pickOrigin,
+  () => bindClick(),
 )
 </script>
