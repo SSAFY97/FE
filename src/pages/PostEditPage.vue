@@ -1,8 +1,8 @@
 <template>
   <div class="mx-auto max-w-2xl px-4 py-8">
     <h1 class="mb-6 text-2xl text-ink">글 수정</h1>
-    <div v-if="loadingPost" class="h-64 animate-pulse rounded-2xl bg-white/70" />
-    <div v-else-if="post" class="rounded-2xl bg-white/75 p-5 shadow-soft">
+    <div v-if="loadingPost" class="h-64 animate-pulse rounded-2xl bg-main" />
+    <div v-else-if="post" class="rounded-2xl bg-main p-5 shadow-soft">
       <PostForm
         :initial="{
           author: post.author,
@@ -18,7 +18,7 @@
         @submit="onSubmit"
         @cancel="$router.push(`/community/${id}`)"
       />
-      <p v-if="error" class="mt-3 text-sm text-red-500">{{ error }}</p>
+      <p v-if="error" class="mt-3 text-sm text-danger">{{ error }}</p>
     </div>
   </div>
 </template>

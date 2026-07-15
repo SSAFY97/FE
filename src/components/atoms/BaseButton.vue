@@ -37,10 +37,10 @@ const props = defineProps({
 
 const variantClass = computed(() => {
   const map = {
-    primary: 'bg-accent text-white hover:brightness-110 shadow-soft',
-    secondary: 'bg-accent-soft text-ink hover:bg-white',
-    ghost: 'bg-transparent text-ink hover:bg-white/70',
-    danger: 'bg-red-500 text-white hover:brightness-110',
+    primary: 'bg-accent text-ink hover:brightness-105 shadow-soft',
+    secondary: 'bg-accent-soft text-ink hover:bg-main',
+    ghost: 'bg-transparent text-ink hover:bg-accent-soft',
+    danger: 'bg-danger text-ink hover:brightness-105',
   }
   return map[props.variant] || map.primary
 })

@@ -1,6 +1,6 @@
 <template>
   <section class="mx-auto w-full max-w-5xl animate-fade-in px-4">
-    <div class="overflow-hidden rounded-3xl bg-white/75 p-4 shadow-soft backdrop-blur-md sm:p-6">
+    <div class="overflow-hidden rounded-3xl bg-main p-4 shadow-soft sm:p-6">
       <div class="mb-4 flex gap-1 overflow-x-auto pb-1">
         <button
           v-for="tab in tabs"
@@ -9,8 +9,8 @@
           class="shrink-0 rounded-xl px-3 py-2 text-sm transition"
           :class="
             tab.key === active
-              ? 'bg-accent text-white shadow-soft'
-              : 'bg-accent-soft/60 text-ink hover:bg-white'
+              ? 'bg-accent text-ink shadow-soft'
+              : 'bg-accent-soft text-ink hover:bg-accent-soft'
           "
           @click="$emit('select', tab.key)"
         >
@@ -26,7 +26,7 @@
           <div
             v-for="n in 8"
             :key="n"
-            class="h-60 animate-pulse rounded-2xl bg-accent-soft/80"
+            class="h-60 animate-pulse rounded-2xl bg-accent-soft"
           />
         </div>
 

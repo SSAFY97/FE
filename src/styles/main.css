@@ -11,12 +11,31 @@
 }
 
 :root {
-  --color-surface: oklch(95.1% 0.026 236.824);
-  --color-ink: oklch(28% 0.04 250);
-  --color-muted: oklch(48% 0.03 250);
-  --color-accent: oklch(52% 0.12 240);
-  --color-accent-soft: oklch(88% 0.04 236);
-  --color-line: oklch(86% 0.02 236);
+  /* fallback 색상(OKLCH 미지원 브라우저 대비) */
+  --color-main: #ffffff;
+  --color-surface: #edeaf5;
+  --color-ink: #2f3443;
+  --color-muted: #666d7d;
+  --color-accent: #ffffff;
+  --color-accent-soft: #ebe8f2;
+  --color-line: #d3d6e2;
+  --color-danger: #df9c90;
+  --color-danger-soft: #f6e9e4;
+  --color-warm: #f1e0bf;
+  --color-warm-ink: #7c5b36;
+
+  /* PANTONE 11-4201 (Cloud Dancer) 계열 메인 톤 */
+  --color-main: oklch(99% 0.004 272.788);
+  --color-surface: oklch(93% 0.034 272.788);
+  --color-ink: oklch(30% 0.045 274);
+  --color-muted: oklch(50% 0.03 274);
+  --color-accent: oklch(99% 0.004 272.788);
+  --color-accent-soft: oklch(92% 0.018 272.788);
+  --color-line: oklch(84% 0.022 278);
+  --color-danger: oklch(72% 0.08 16);
+  --color-danger-soft: oklch(92% 0.03 12);
+  --color-warm: oklch(89% 0.05 58);
+  --color-warm-ink: oklch(49% 0.08 42);
 }
 
 @layer base {
@@ -39,6 +58,19 @@
 }
 
 @layer utilities {
+  .bg-subpage-radial {
+    background-color: oklch(93% 0.034 272.788);
+    background-image: linear-gradient(
+      135deg,
+      oklch(91% 0.04 220) 0%,
+      oklch(91% 0.04 290) 100%
+    );
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: 100% 100vh;
+    background-attachment: fixed;
+  }
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

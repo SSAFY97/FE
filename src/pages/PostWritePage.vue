@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto max-w-2xl px-4 py-8">
     <h1 class="mb-6 text-2xl text-ink">글쓰기</h1>
-    <div class="rounded-2xl bg-white/75 p-5 shadow-soft">
+    <div class="rounded-2xl bg-main p-5 shadow-soft">
       <PostForm
         :loading="loading"
         submit-label="등록"
@@ -9,7 +9,7 @@
         @submit="onSubmit"
         @cancel="$router.push('/community')"
       />
-      <p v-if="error" class="mt-3 text-sm text-red-500">{{ error }}</p>
+      <p v-if="error" class="mt-3 text-sm text-danger">{{ error }}</p>
     </div>
   </div>
 </template>

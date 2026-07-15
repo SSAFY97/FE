@@ -4,7 +4,7 @@
     <select
       :value="modelValue"
       :disabled="disabled"
-      class="w-full appearance-none rounded-xl border border-line bg-white/80 px-3 py-2.5 text-sm text-ink outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:opacity-50"
+      class="w-full appearance-none rounded-xl border border-line bg-main px-3 py-2.5 text-sm text-ink outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:opacity-50"
       v-bind="$attrs"
       @change="$emit('update:modelValue', $event.target.value)"
     >

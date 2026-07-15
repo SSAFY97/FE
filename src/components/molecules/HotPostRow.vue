@@ -1,7 +1,7 @@
 <template>
   <RouterLink
     :to="`/community/${post.id}`"
-    class="flex items-center gap-4 rounded-2xl bg-white/75 px-4 py-3 shadow-soft transition duration-300 hover:-translate-y-0.5 hover:bg-white"
+    class="flex items-center gap-4 rounded-2xl bg-main px-4 py-3 shadow-soft transition duration-300 hover:-translate-y-0.5 hover:bg-accent-soft"
   >
     <BaseBadge tone="hot">HOT</BaseBadge>
     <div class="min-w-0 flex-1">

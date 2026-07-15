@@ -1,6 +1,6 @@
 <template>
   <article
-    class="group flex h-full min-h-[240px] flex-col overflow-hidden rounded-2xl bg-white/80 shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+    class="group flex h-full min-h-[240px] flex-col overflow-hidden rounded-2xl bg-main shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-lg"
   >
     <div class="relative h-[60%] min-h-[144px] flex-[3] overflow-hidden bg-accent-soft">
       <img

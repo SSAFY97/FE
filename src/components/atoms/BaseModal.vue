@@ -5,7 +5,7 @@
     @click.self="$emit('close')"
   >
     <div
-      class="animate-scale-in w-full max-w-md rounded-2xl bg-white p-5 shadow-soft"
+      class="animate-scale-in w-full max-w-md rounded-2xl bg-main p-5 shadow-soft"
       role="dialog"
       aria-modal="true"
     >

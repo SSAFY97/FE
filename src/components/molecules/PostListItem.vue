@@ -1,7 +1,7 @@
 <template>
   <RouterLink
     :to="`/community/${post.id}`"
-    class="flex items-center justify-between gap-4 border-b border-line/70 px-2 py-4 transition hover:bg-white/60"
+    class="flex items-center justify-between gap-4 border-b border-line/70 px-2 py-4 transition hover:bg-main"
   >
     <div class="min-w-0 flex-1">
       <p class="truncate text-sm text-ink">

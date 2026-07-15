@@ -17,8 +17,8 @@ const props = defineProps({
 const toneClass = computed(() => {
   const map = {
     soft: 'bg-accent-soft text-accent',
-    muted: 'bg-white/70 text-muted',
-    hot: 'bg-orange-100 text-orange-700',
+    muted: 'bg-main text-muted',
+    hot: 'bg-warm text-warm-ink',
   }
   return map[props.tone] || map.soft
 })

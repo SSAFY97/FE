@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto max-w-2xl px-4 py-8">
-    <div v-if="loading" class="h-72 animate-pulse rounded-2xl bg-white/70" />
+    <div v-if="loading" class="h-72 animate-pulse rounded-2xl bg-main" />
     <article v-else-if="post" class="animate-fade-in">
       <div class="mb-4 flex flex-wrap items-center gap-2">
         <RouterLink to="/community" class="text-sm text-accent hover:underline">
@@ -8,7 +8,7 @@
         </RouterLink>
       </div>
 
-      <div class="rounded-2xl bg-white/80 p-6 shadow-soft">
+      <div class="rounded-2xl bg-main p-6 shadow-soft">
         <h1 class="text-2xl text-ink">{{ post.title }}</h1>
         <p class="mt-2 text-sm text-muted">
           {{ post.author }} · {{ formatDate(post.createdAt) }}
@@ -17,7 +17,7 @@
           <button
             type="button"
             class="inline-flex items-center gap-1 rounded-lg px-2 py-1 transition hover:bg-accent-soft"
-            :class="post.liked ? 'text-red-500' : ''"
+            :class="post.liked ? 'text-danger' : ''"
             @click="toggleLike"
           >
             <BaseIcon name="heart" :size="16" />
@@ -42,13 +42,13 @@
         </div>
       </div>
 
-      <section class="mt-6 rounded-2xl bg-white/75 p-5 shadow-soft">
+      <section class="mt-6 rounded-2xl bg-main p-5 shadow-soft">
         <h2 class="mb-4 text-lg text-ink">댓글</h2>
         <ul class="mb-5 space-y-3">
           <li
             v-for="c in post.comments || []"
             :key="c.id"
-            class="rounded-xl bg-surface/80 px-3 py-2"
+            class="rounded-xl bg-surface px-3 py-2"
           >
             <p class="text-sm text-ink">{{ c.content }}</p>
             <p class="mt-1 text-xs text-muted">
@@ -65,7 +65,7 @@
           <BaseInput v-model="commentContent" placeholder="댓글 내용" class="flex-1" />
           <BaseButton type="submit" :loading="commentLoading">등록</BaseButton>
         </form>
-        <p v-if="commentError" class="mt-2 text-sm text-red-500">{{ commentError }}</p>
+        <p v-if="commentError" class="mt-2 text-sm text-danger">{{ commentError }}</p>
       </section>
     </article>
 
@@ -77,7 +77,7 @@
         placeholder="비밀번호"
         class="mb-4"
       />
-      <p v-if="deleteError" class="mb-3 text-sm text-red-500">{{ deleteError }}</p>
+      <p v-if="deleteError" class="mb-3 text-sm text-danger">{{ deleteError }}</p>
       <div class="flex justify-end gap-2">
         <BaseButton variant="ghost" @click="pwOpen = false">취소</BaseButton>
         <BaseButton variant="danger" :loading="deleting" @click="onDelete">

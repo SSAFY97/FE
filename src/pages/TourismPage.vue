@@ -1,5 +1,6 @@
 <template>
-  <div class="mx-auto max-w-6xl px-4 py-8">
+  <div class="min-h-screen bg-subpage-radial pt-[4.25rem]">
+    <div class="mx-auto max-w-6xl px-4 py-8">
     <div class="mb-6">
       <h1 class="text-2xl text-ink">관광정보</h1>
       <p class="mt-1 text-sm text-muted">서울의 여행지를 카테고리별로 둘러보세요</p>
@@ -24,10 +25,11 @@
       <div
         v-for="n in 8"
         :key="n"
-        class="h-56 animate-pulse rounded-2xl bg-white/70"
+        class="h-56 animate-pulse rounded-2xl bg-main"
       />
     </div>
-    <TourGrid v-else :items="displayItems" />
+      <TourGrid v-else :items="displayItems" />
+    </div>
   </div>
 </template>
 

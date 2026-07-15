@@ -4,19 +4,24 @@ export default {
   theme: {
     extend: {
       colors: {
+        main: 'var(--color-main)',
         surface: 'var(--color-surface)',
         ink: 'var(--color-ink)',
         muted: 'var(--color-muted)',
         accent: 'var(--color-accent)',
         'accent-soft': 'var(--color-accent-soft)',
         line: 'var(--color-line)',
+        danger: 'var(--color-danger)',
+        'danger-soft': 'var(--color-danger-soft)',
+        warm: 'var(--color-warm)',
+        'warm-ink': 'var(--color-warm-ink)',
       },
       fontFamily: {
         display: ['YeogiOttaeJalnan', 'sans-serif'],
         sans: ['YeogiOttaeJalnan', 'Pretendard', 'sans-serif'],
       },
       boxShadow: {
-        soft: '0 10px 30px -12px rgba(30, 58, 95, 0.18)',
+        soft: '0 10px 28px -14px color-mix(in oklab, var(--color-ink) 22%, transparent)',
       },
       keyframes: {
         'fade-in': {

@@ -1,7 +1,7 @@
 # 기본 UI 명세
-- 우리의 메인 레퍼런스 사이트 링크야. https://www.fillout.com/?ref=saaspo.com
+메인 레퍼런스 사이트 링크 https://www.fillout.com/?ref=saaspo.com
 - 폰트는 여기어때 잘난체 써줘. https://noonnu.cc/font_page/115
-- 메인 배경색은 oklch(95.1% 0.026 236.824) 로 해주고 나머지 색은 잘 어울리는 색으로 매치해줘.
+- 메인 컴포넌트색은 color of the year인 PANTONE 11-4201 로 해주고 배경색은 oklch(93% 0.034 272.788)로 해줘, 나머지 색은 파스텔 톤으로 잘 어울리는 색으로 매치해줘.
 
 # 네비바
 - 최상단에 네비바가 위치해 있으며 구성 요소는 좌측부터 서비스명(LocalHub), 관광정보, 커뮤니티, chat아이콘 순서야.

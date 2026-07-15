@@ -1,5 +1,6 @@
 <template>
-  <div class="mx-auto max-w-6xl px-4 py-8">
+  <div class="min-h-screen bg-subpage-radial pt-[4.25rem]">
+    <div class="mx-auto max-w-6xl px-4 py-8">
     <div class="mb-6 flex items-end justify-between gap-4">
       <div>
         <h1 class="text-2xl text-ink">커뮤니티</h1>
@@ -7,7 +8,7 @@
       </div>
       <RouterLink
         to="/community/write"
-        class="inline-flex items-center justify-center rounded-xl bg-accent px-4 py-2 text-sm text-white shadow-soft transition hover:brightness-110"
+        class="inline-flex items-center justify-center rounded-xl bg-accent px-4 py-2 text-sm text-ink shadow-soft transition hover:brightness-110"
       >
         글쓰기
       </RouterLink>
@@ -23,15 +24,16 @@
       @search="load"
     />
 
-    <div class="mt-5">
-      <div v-if="loading" class="space-y-3">
-        <div
-          v-for="n in 5"
-          :key="n"
-          class="h-16 animate-pulse rounded-2xl bg-white/70"
-        />
+      <div class="mt-5">
+        <div v-if="loading" class="space-y-3">
+          <div
+            v-for="n in 5"
+            :key="n"
+            class="h-16 animate-pulse rounded-2xl bg-main"
+          />
+        </div>
+        <PostList v-else :posts="posts" />
       </div>
-      <PostList v-else :posts="posts" />
     </div>
   </div>
 </template>
