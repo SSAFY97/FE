@@ -2,7 +2,7 @@
   <button
     type="button"
     class="group flex h-60 w-full flex-col overflow-hidden rounded-2xl bg-main text-left shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-    @click="$emit('select', id)"
+    @click="$emit('select', item)"
   >
     <div class="h-36 w-full shrink-0 overflow-hidden bg-accent-soft">
       <BaseImage
@@ -27,7 +27,8 @@
 import BaseImage from '@/components/atoms/BaseImage.vue'
 
 defineProps({
-  id: { type: [String, Number], required: true },
+  /** @type {import('vue').PropType<import('@/types/location.js').LocationListItem>} */
+  item: { type: Object, required: true },
   title: { type: String, default: '' },
   address: { type: String, default: '' },
   image: { type: String, default: '' },

@@ -3,7 +3,7 @@
     <TourCard
       v-for="item in items"
       :key="item.contentid + (item.title || '')"
-      :id="item.contentid || item.id"
+      :item="item"
       :title="item.title"
       :address="item.addr1"
       :image="item.firstimage2 || item.firstimage"

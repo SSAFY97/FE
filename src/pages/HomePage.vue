@@ -37,6 +37,9 @@
     <TourDetailModal
       :open="tourModalOpen"
       :location-id="selectedLocationId"
+      :mapx="selectedMapx"
+      :mapy="selectedMapy"
+      :preview-title="selectedPreviewTitle"
       @close="closeTourDetail"
     />
   </div>
@@ -60,6 +63,9 @@ const previewLoading = ref(true)
 const hotPosts = ref([])
 const tourModalOpen = ref(false)
 const selectedLocationId = ref('')
+const selectedMapx = ref('')
+const selectedMapy = ref('')
+const selectedPreviewTitle = ref('')
 const { isDark } = useTheme()
 const heroStyle = computed(() => ({
   backgroundImage: `url('${isDark.value ? '/hero_dark.webp' : '/hero_light.webp'}')`,
@@ -75,14 +81,25 @@ function prefersReducedMotion() {
   )
 }
 
-function openTourDetail(id) {
-  selectedLocationId.value = id
+/**
+ * @param {import('@/types/location.js').LocationListItem} item
+ */
+function openTourDetail(item) {
+  selectedLocationId.value = item?.contentid || item?.id || ''
+  selectedMapx.value = item?.mapx || ''
+  selectedMapy.value = item?.mapy || ''
+  selectedPreviewTitle.value = item?.title || ''
   tourModalOpen.value = true
+  pauseTimer()
 }
 
 function closeTourDetail() {
   tourModalOpen.value = false
   selectedLocationId.value = ''
+  selectedMapx.value = ''
+  selectedMapy.value = ''
+  selectedPreviewTitle.value = ''
+  resumeTimer()
 }
 
 async function loadPreview(category) {

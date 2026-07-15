@@ -6,14 +6,25 @@
     <p v-if="description" class="mt-2 text-sm text-muted">
       {{ description }}
     </p>
-    <BaseButton
-      v-if="actionLabel"
-      class="mt-4"
-      :variant="tone === 'error' ? 'secondary' : 'ghost'"
-      @click="$emit('action')"
+    <div
+      v-if="actionLabel || secondaryActionLabel"
+      class="mt-4 flex flex-wrap items-center justify-center gap-2"
     >
-      {{ actionLabel }}
-    </BaseButton>
+      <BaseButton
+        v-if="actionLabel"
+        :variant="tone === 'error' ? 'secondary' : 'ghost'"
+        @click="$emit('action')"
+      >
+        {{ actionLabel }}
+      </BaseButton>
+      <BaseButton
+        v-if="secondaryActionLabel"
+        variant="ghost"
+        @click="$emit('secondary-action')"
+      >
+        {{ secondaryActionLabel }}
+      </BaseButton>
+    </div>
   </div>
 </template>
 
@@ -24,11 +35,12 @@ defineProps({
   title: { type: String, required: true },
   description: { type: String, default: '' },
   actionLabel: { type: String, default: '' },
+  secondaryActionLabel: { type: String, default: '' },
   tone: {
     type: String,
     default: 'empty',
   },
 })
 
-defineEmits(['action'])
+defineEmits(['action', 'secondary-action'])
 </script>

@@ -19,11 +19,15 @@
           :src="detail.firstimage || detail.firstimage2 || ''"
           :alt="detail.title"
           class="block h-52 w-full object-cover sm:h-60"
+          loading="lazy"
         />
       </div>
 
-      <div v-if="categoryLabel" class="flex flex-wrap items-center gap-2">
-        <BaseBadge tone="soft">{{ categoryLabel }}</BaseBadge>
+      <div
+        v-if="categoryLabel || createdLabel !== '정보 없음'"
+        class="flex flex-wrap items-center gap-2"
+      >
+        <BaseBadge v-if="categoryLabel" tone="soft">{{ categoryLabel }}</BaseBadge>
         <span v-if="createdLabel !== '정보 없음'" class="text-xs text-muted">
           {{ createdLabel }} 등록
         </span>
@@ -49,12 +53,26 @@
           <p v-else class="mt-1 text-sm text-muted">등록된 번호가 없습니다</p>
         </div>
       </div>
+
+      <div class="space-y-2">
+        <BaseButton
+          class="w-full"
+          :disabled="!hasCoords"
+          @click="goDirections"
+        >
+          이 장소까지 산책하기
+        </BaseButton>
+        <p v-if="!hasCoords" class="text-center text-xs text-muted">
+          좌표 정보가 없어 길찾기를 할 수 없습니다
+        </p>
+      </div>
     </div>
   </BaseModal>
 </template>
 
 <script setup>
 import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import BaseModal from '@/components/atoms/BaseModal.vue'
 import BaseImage from '@/components/atoms/BaseImage.vue'
 import BaseButton from '@/components/atoms/BaseButton.vue'
@@ -65,15 +83,28 @@ import { TOUR_CATEGORIES } from '@/constants/tourism'
 const props = defineProps({
   open: Boolean,
   locationId: { type: [String, Number], default: '' },
+  mapx: { type: [String, Number], default: '' },
+  mapy: { type: [String, Number], default: '' },
+  previewTitle: { type: String, default: '' },
 })
 
-defineEmits(['close'])
+const emit = defineEmits(['close'])
+const router = useRouter()
 
 const loading = ref(false)
 const error = ref('')
 const detail = ref(null)
+let fetchSeq = 0
 
-const modalTitle = computed(() => detail.value?.title || '장소 상세')
+const lat = computed(() => parseFloat(String(props.mapy)))
+const lng = computed(() => parseFloat(String(props.mapx)))
+const hasCoords = computed(
+  () => Number.isFinite(lat.value) && Number.isFinite(lng.value),
+)
+
+const modalTitle = computed(
+  () => detail.value?.title || props.previewTitle || '장소 상세',
+)
 
 const addressText = computed(() => {
   if (!detail.value) return '주소 정보가 없습니다'
@@ -103,26 +134,56 @@ const createdLabel = computed(() => {
 })
 
 async function fetchDetail() {
-  if (!props.locationId) return
+  if (!props.locationId) {
+    error.value = '장소 정보가 없습니다.'
+    detail.value = null
+    loading.value = false
+    return
+  }
+  const seq = ++fetchSeq
   loading.value = true
   error.value = ''
   detail.value = null
   try {
-    detail.value = await locationApi.get(props.locationId)
+    const data = await locationApi.get(props.locationId)
+    if (seq !== fetchSeq) return
+    detail.value = data
   } catch {
+    if (seq !== fetchSeq) return
     error.value = '장소 정보를 불러오지 못했습니다.'
   } finally {
-    loading.value = false
+    if (seq === fetchSeq) loading.value = false
   }
+}
+
+function goDirections() {
+  if (!hasCoords.value) return
+  const name = detail.value?.title || props.previewTitle || '도착지'
+  emit('close')
+  router.push({
+    name: 'directions',
+    query: {
+      lat: String(lat.value),
+      lng: String(lng.value),
+      name,
+    },
+  })
 }
 
 watch(
   () => [props.open, props.locationId],
   ([open, id]) => {
     if (open && id) fetchDetail()
+    else if (open && !id) {
+      loading.value = false
+      detail.value = null
+      error.value = '장소 정보가 없습니다.'
+    }
     if (!open) {
+      fetchSeq += 1
       detail.value = null
       error.value = ''
+      loading.value = false
     }
   },
 )

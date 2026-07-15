@@ -51,7 +51,9 @@
       :title="error"
       :description="errorDetail"
       action-label="다시 시도"
-      @action="onSearch"
+      :secondary-action-label="tooFarError ? '다른 장소 찾아보기' : ''"
+      @action="retry"
+      @secondary-action="goTourism"
     />
 
     <div class="mt-5 h-[min(70vh,36rem)]">
@@ -67,7 +69,8 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import PageShell from '@/components/molecules/PageShell.vue'
 import SearchField from '@/components/molecules/SearchField.vue'
 import StateMessage from '@/components/molecules/StateMessage.vue'
@@ -77,16 +80,20 @@ import { tourismApi } from '@/services/tourismApi'
 import { routeApi } from '@/api/routeApi'
 import { SEOUL_CITY_HALL } from '@/constants/tourism'
 
+const route = useRoute()
+const router = useRouter()
 const query = ref('')
 const loading = ref(false)
 const error = ref('')
 const errorDetail = ref('')
+const tooFarError = ref(false)
 /** @type {import('vue').Ref<import('@/types/location.js').LocationListItem | null>} */
 const destination = ref(null)
 /** @type {import('vue').Ref<{ lat: number, lng: number }[]>} */
 const routePath = ref([])
 const totalDistance = ref(0)
 const totalTime = ref(0)
+const appliedDeepLink = ref('')
 
 const { position, status, ensureLocation, setPosition } = useGeolocation()
 
@@ -112,9 +119,28 @@ const routeSummary = computed(() => {
   return `도보 약 ${km} · ${minutes}분`
 })
 
+/**
+ * @returns {{ lat: number, lng: number, name: string } | null}
+ */
+function parseDeepLinkQuery() {
+  const lat = parseFloat(String(route.query.lat ?? ''))
+  const lng = parseFloat(String(route.query.lng ?? ''))
+  const name = String(route.query.name ?? '').trim()
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
+  return { lat, lng, name: name || '도착지' }
+}
+
 onMounted(() => {
   void ensureLocation({ force: true })
+  void tryDeepLink()
 })
+
+watch(
+  () => [route.query.lat, route.query.lng, route.query.name],
+  () => {
+    void tryDeepLink()
+  },
+)
 
 /**
  * @param {{ lat: number, lng: number }} point
@@ -124,6 +150,11 @@ function onPickOrigin(point) {
   clearRoute()
   error.value = ''
   errorDetail.value = ''
+  tooFarError.value = false
+}
+
+function goTourism() {
+  router.push({ name: 'tourism' })
 }
 
 function clearRoute() {
@@ -131,6 +162,103 @@ function clearRoute() {
   routePath.value = []
   totalDistance.value = 0
   totalTime.value = 0
+}
+
+function retry() {
+  const deep = parseDeepLinkQuery()
+  if (deep) {
+    appliedDeepLink.value = ''
+    void tryDeepLink()
+    return
+  }
+  void onSearch()
+}
+
+async function tryDeepLink() {
+  const deep = parseDeepLinkQuery()
+  if (!deep) return
+
+  const key = `${deep.lat},${deep.lng},${deep.name}`
+  if (appliedDeepLink.value === key) return
+  appliedDeepLink.value = key
+
+  query.value = deep.name
+  await requestPedestrianRoute({
+    title: deep.name,
+    mapx: String(deep.lng),
+    mapy: String(deep.lat),
+    contentid: '',
+    contenttypeid: '',
+  })
+}
+
+/**
+ * @param {import('@/types/location.js').LocationListItem} place
+ */
+async function requestPedestrianRoute(place) {
+  loading.value = true
+  error.value = ''
+  errorDetail.value = ''
+  tooFarError.value = false
+  clearRoute()
+
+  try {
+    if (!position.value) {
+      await ensureLocation({ force: true })
+    }
+
+    const destLat = parseFloat(place.mapy)
+    const destLng = parseFloat(place.mapx)
+    if (!Number.isFinite(destLat) || !Number.isFinite(destLng)) {
+      error.value = '좌표 정보가 없습니다'
+      errorDetail.value = '다른 도착지를 검색해 보세요.'
+      return
+    }
+
+    destination.value = place
+
+    if (!position.value) {
+      error.value = '출발지가 없습니다'
+      errorDetail.value = '지도를 클릭해 출발지를 지정해 주세요.'
+      return
+    }
+
+    const userPos = { lat: position.value.lat, lng: position.value.lng }
+    const routeResult = await routeApi.getPedestrian({
+      origin: {
+        name: '현위치',
+        latitude: userPos.lat,
+        longitude: userPos.lng,
+      },
+      destination: {
+        name: place.title || '도착지',
+        latitude: destLat,
+        longitude: destLng,
+      },
+    })
+
+    if (!routeResult.path?.length) {
+      error.value = '경로를 찾지 못했습니다'
+      errorDetail.value = '다른 도착지를 검색해 보세요.'
+      return
+    }
+
+    routePath.value = routeResult.path
+    totalDistance.value = routeResult.distanceMeters
+    totalTime.value = routeResult.durationSeconds
+  } catch (err) {
+    if (err?.status === 422) {
+      const destName = place.title || '도착지'
+      error.value = `${destName}까지는 너무 멀어요!`
+      errorDetail.value = ''
+      tooFarError.value = true
+    } else {
+      error.value = '길찾기에 실패했습니다'
+      errorDetail.value = err?.message || '잠시 후 다시 시도해 주세요.'
+    }
+  } finally {
+    loading.value = false
+  }
 }
 
 async function onSearch() {
@@ -144,7 +272,12 @@ async function onSearch() {
   loading.value = true
   error.value = ''
   errorDetail.value = ''
+  tooFarError.value = false
   clearRoute()
+  appliedDeepLink.value = ''
+
+  /** @type {import('@/types/location.js').LocationListItem | null} */
+  let place = null
 
   try {
     if (!position.value) {
@@ -165,47 +298,24 @@ async function onSearch() {
       userPos,
     })
 
-    const place = items.find((item) => {
-      const lat = parseFloat(item.mapy)
-      const lng = parseFloat(item.mapx)
-      return Number.isFinite(lat) && Number.isFinite(lng)
-    })
+    place =
+      items.find((item) => {
+        const lat = parseFloat(item.mapy)
+        const lng = parseFloat(item.mapx)
+        return Number.isFinite(lat) && Number.isFinite(lng)
+      }) || null
 
     if (!place) {
       error.value = '검색 결과가 없습니다'
       errorDetail.value = '장소명이나 주소를 바꿔 보세요.'
-      return
     }
-
-    destination.value = place
-
-    const route = await routeApi.getPedestrian({
-      origin: {
-        name: '현위치',
-        latitude: userPos.lat,
-        longitude: userPos.lng,
-      },
-      destination: {
-        name: place.title || '도착지',
-        latitude: parseFloat(place.mapy),
-        longitude: parseFloat(place.mapx),
-      },
-    })
-
-    if (!route.path?.length) {
-      error.value = '경로를 찾지 못했습니다'
-      errorDetail.value = '다른 도착지를 검색해 보세요.'
-      return
-    }
-
-    routePath.value = route.path
-    totalDistance.value = route.distanceMeters
-    totalTime.value = route.durationSeconds
   } catch (err) {
     error.value = '길찾기에 실패했습니다'
     errorDetail.value = err?.message || '잠시 후 다시 시도해 주세요.'
   } finally {
     loading.value = false
   }
+
+  if (place) await requestPedestrianRoute(place)
 }
 </script>

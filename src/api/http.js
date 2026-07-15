@@ -42,7 +42,9 @@ export async function request(method, path, body) {
   }
 
   if (!res.ok) {
-    throw new Error(payload?.message || `HTTP_${res.status}`)
+    const err = new Error(payload?.message || `HTTP_${res.status}`)
+    err.status = res.status
+    throw err
   }
 
   if (

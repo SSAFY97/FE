@@ -101,6 +101,9 @@
     <TourDetailModal
       :open="tourModalOpen"
       :location-id="selectedLocationId"
+      :mapx="selectedMapx"
+      :mapy="selectedMapy"
+      :preview-title="selectedPreviewTitle"
       @close="closeTourDetail"
     />
   </PageShell>
@@ -129,6 +132,9 @@ const error = ref('')
 const page = ref(1)
 const tourModalOpen = ref(false)
 const selectedLocationId = ref('')
+const selectedMapx = ref('')
+const selectedMapy = ref('')
+const selectedPreviewTitle = ref('')
 const { position, ready, status, requestLocation, positionOrDefault } =
   useGeolocation()
 
@@ -189,14 +195,23 @@ const geoBanner = computed(() => {
   return ''
 })
 
-function openTourDetail(id) {
-  selectedLocationId.value = id
+/**
+ * @param {import('@/types/location.js').LocationListItem} item
+ */
+function openTourDetail(item) {
+  selectedLocationId.value = item?.contentid || item?.id || ''
+  selectedMapx.value = item?.mapx || ''
+  selectedMapy.value = item?.mapy || ''
+  selectedPreviewTitle.value = item?.title || ''
   tourModalOpen.value = true
 }
 
 function closeTourDetail() {
   tourModalOpen.value = false
   selectedLocationId.value = ''
+  selectedMapx.value = ''
+  selectedMapy.value = ''
+  selectedPreviewTitle.value = ''
 }
 
 function goToPage(p) {

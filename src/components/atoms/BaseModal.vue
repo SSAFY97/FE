@@ -5,13 +5,19 @@
     @click.self="emit('close')"
   >
     <div
-      class="animate-scale-in w-full rounded-2xl bg-main p-5 shadow-soft"
+      class="animate-scale-in flex max-h-[min(90vh,40rem)] w-full flex-col rounded-2xl bg-main shadow-soft"
       :class="sizeClass"
       role="dialog"
       aria-modal="true"
+      :aria-labelledby="titleId"
     >
-      <div class="mb-4 flex items-start justify-between gap-3">
-        <h3 class="min-w-0 flex-1 text-lg font-bold leading-snug text-ink">{{ title }}</h3>
+      <div class="flex shrink-0 items-start justify-between gap-3 px-5 pt-5">
+        <h3
+          :id="titleId"
+          class="min-w-0 flex-1 text-lg font-bold leading-snug text-ink"
+        >
+          {{ title }}
+        </h3>
         <button
           type="button"
           class="rounded-lg p-1 text-muted hover:bg-surface"
@@ -21,7 +27,9 @@
           <BaseIcon name="x" :size="18" />
         </button>
       </div>
-      <slot />
+      <div class="min-h-0 flex-1 overflow-y-auto px-5 pb-5 pt-4">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
@@ -41,6 +49,8 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
+const titleId = `base-modal-title-${Math.random().toString(36).slice(2, 9)}`
+
 const sizeClass = computed(() => {
   const map = {
     md: 'max-w-md',
@@ -53,18 +63,27 @@ function onKeydown(e) {
   if (e.key === 'Escape') emit('close')
 }
 
+function lockBodyScroll(lock) {
+  if (typeof document === 'undefined') return
+  document.body.style.overflow = lock ? 'hidden' : ''
+}
+
 watch(
   () => props.open,
   (v) => {
     if (v) {
       window.addEventListener('keydown', onKeydown)
+      lockBodyScroll(true)
     } else {
       window.removeEventListener('keydown', onKeydown)
+      lockBodyScroll(false)
     }
   },
+  { immediate: true },
 )
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
+  lockBodyScroll(false)
 })
 </script>
