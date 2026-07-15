@@ -20,6 +20,7 @@
       <TourPreviewTabs
         :tabs="tabs"
         :active="activeTab"
+        :content-key="loadedTab"
         :items="previewItems"
         :loading="previewLoading"
         @select="onSelectTab"
@@ -40,31 +41,41 @@ import { postApi } from '@/services/postApi'
 
 const tabs = TOUR_CATEGORIES
 const activeTab = ref(tabs[0].key)
+const loadedTab = ref(tabs[0].key)
 const previewItems = ref([])
 const previewLoading = ref(true)
 const hotPosts = ref([])
 let timer = null
+let loadSeq = 0
 
 async function loadPreview(category) {
-  previewLoading.value = true
+  activeTab.value = category
+  const seq = ++loadSeq
+  const initial = previewItems.value.length === 0
+  if (initial) previewLoading.value = true
+
   try {
-    previewItems.value = await tourismApi.getPreview(category, 8)
+    const items = await tourismApi.getPreview(category, 8)
+    if (seq !== loadSeq) return
+    previewItems.value = items
+    loadedTab.value = category
   } catch {
+    if (seq !== loadSeq) return
     previewItems.value = []
+    loadedTab.value = category
   } finally {
-    previewLoading.value = false
+    if (seq === loadSeq) previewLoading.value = false
   }
 }
 
 function nextTab() {
   const idx = tabs.findIndex((t) => t.key === activeTab.value)
   const next = tabs[(idx + 1) % tabs.length]
-  activeTab.value = next.key
   loadPreview(next.key)
 }
 
 function onSelectTab(key) {
-  activeTab.value = key
+  if (key === activeTab.value) return
   loadPreview(key)
   resetTimer()
 }

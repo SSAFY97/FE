@@ -18,35 +18,40 @@
         </button>
       </div>
 
-      <div v-if="loading" class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div class="preview-stage relative">
         <div
-          v-for="n in 8"
-          :key="n"
-          class="h-36 animate-pulse rounded-2xl bg-accent-soft/80"
-        />
-      </div>
-
-      <Transition name="fade" mode="out-in">
-        <div
-          v-if="!loading"
-          :key="active"
+          v-if="loading && !items.length"
           class="grid grid-cols-2 gap-3 sm:grid-cols-4"
         >
-          <TourCard
-            v-for="item in items"
-            :key="item.contentid"
-            :title="item.title"
-            :address="item.addr1"
-            :image="item.firstimage2 || item.firstimage"
+          <div
+            v-for="n in 8"
+            :key="n"
+            class="h-60 animate-pulse rounded-2xl bg-accent-soft/80"
           />
-          <p
-            v-if="!items.length"
-            class="col-span-full py-10 text-center text-sm text-muted"
-          >
-            표시할 이미지가 없습니다.
-          </p>
         </div>
-      </Transition>
+
+        <Transition v-else name="fade" mode="out-in">
+          <div
+            :key="contentKey"
+            class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+          >
+            <TourCard
+              v-for="item in items"
+              :key="item.contentid"
+              class="h-60"
+              :title="item.title"
+              :address="item.addr1"
+              :image="item.firstimage2 || item.firstimage"
+            />
+            <p
+              v-if="!items.length"
+              class="col-span-full py-10 text-center text-sm text-muted"
+            >
+              표시할 이미지가 없습니다.
+            </p>
+          </div>
+        </Transition>
+      </div>
     </div>
   </section>
 </template>
@@ -57,6 +62,7 @@ import TourCard from '@/components/molecules/TourCard.vue'
 defineProps({
   tabs: { type: Array, default: () => [] },
   active: { type: String, default: '' },
+  contentKey: { type: String, default: '' },
   items: { type: Array, default: () => [] },
   loading: Boolean,
 })
@@ -65,10 +71,22 @@ defineEmits(['select'])
 </script>
 
 <style scoped>
+.preview-stage {
+  /* 카드 h-60(240px) × 행 + gap-3 — 모바일 4행 / sm 2행 */
+  min-height: calc(15rem * 4 + 0.75rem * 3);
+}
+
+@media (min-width: 640px) {
+  .preview-stage {
+    min-height: calc(15rem * 2 + 0.75rem);
+  }
+}
+
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.28s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
