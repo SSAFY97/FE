@@ -11,7 +11,7 @@
 
     <div class="relative z-10 flex flex-col gap-12 pb-16 pt-24 sm:pt-28">
       <div class="mx-auto max-w-3xl px-4 text-center">
-        <p class="text-3xl text-ink sm:text-4xl">LocalHub</p>
+        <p class="text-3xl text-ink sm:text-4xl">서울이음</p>
         <p class="mt-3 text-sm text-muted sm:text-base">
           서울의 관광 정보와 여행자들의 이야기를 한곳에서
         </p>

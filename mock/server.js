@@ -21,7 +21,7 @@ function fail(res, status, message) {
 function buildReply(message) {
   const text = String(message || '').toLowerCase()
   if (/안녕|헬로|hi|hello/.test(text)) {
-    return '안녕하세요! LocalHub 여행 도우미입니다. 서울 관광지나 커뮤니티에 대해 물어보세요.'
+    return '안녕하세요! 서울이음 여행 도우미입니다. 서울 관광지나 커뮤니티에 대해 물어보세요.'
   }
   if (/추천|가볼|관광/.test(text)) {
     return '요즘 인기 코스는 한강공원, 북촌 한옥마을, 남산타워입니다. 관광정보 탭에서 더 자세히 둘러보세요!'

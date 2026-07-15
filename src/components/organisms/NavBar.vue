@@ -6,7 +6,7 @@
       class="flex h-14 items-center justify-between rounded-2xl border border-line/70 bg-main px-4 shadow-soft backdrop-blur-sm sm:px-6"
     >
       <RouterLink to="/" class="text-lg tracking-tight text-ink transition hover:text-accent">
-        LocalHub
+        서울이음
       </RouterLink>
 
       <nav class="flex items-center gap-1 sm:gap-2">

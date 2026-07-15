@@ -1,12 +1,3 @@
-/** Simple non-crypto hash for anonymous board password mock. */
-export async function hashPassword(password) {
-  const data = new TextEncoder().encode(`localhub:${password}`)
-  const digest = await crypto.subtle.digest('SHA-256', data)
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('')
-}
-
 export function haversineKm(lat1, lng1, lat2, lng2) {
   const toRad = (d) => (d * Math.PI) / 180
   const R = 6371

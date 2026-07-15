@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 
-const STORAGE_KEY = 'localhub-theme'
+const STORAGE_KEY = 'seouleum-theme'
 const theme = ref('light')
 let initialized = false
 

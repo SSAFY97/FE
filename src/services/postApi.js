@@ -1,6 +1,6 @@
 import { postApi as boardApi } from '@/api/postApi'
 
-const LIKES_KEY = 'localhub_liked_ids'
+const LIKES_KEY = 'seouleum_liked_ids'
 
 function readLikedIds() {
   try {
@@ -156,11 +156,5 @@ export const postApi = {
       created_at: board.created_at,
     })
     return toUiPost(updated, liked)
-  },
-
-  async verifyPassword(id, password) {
-    const board = await boardApi.get(id)
-    if (!board) throw new Error('NOT_FOUND')
-    return String(board.board_password) === String(password)
   },
 }

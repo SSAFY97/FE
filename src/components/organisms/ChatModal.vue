@@ -11,7 +11,7 @@
     >
       <div class="flex items-center justify-between border-b border-line/60 bg-main px-4 py-3">
         <div>
-          <p class="text-sm text-ink">LocalHub 챗봇</p>
+          <p class="text-sm text-ink">서울이음 챗봇</p>
           <p class="text-xs text-muted">서울 여행 도우미</p>
         </div>
         <button
@@ -69,7 +69,7 @@ defineEmits(['close'])
 const messages = ref([
   {
     role: 'bot',
-    text: '안녕하세요! LocalHub 챗봇입니다. 서울 관광·커뮤니티에 대해 물어보세요.',
+    text: '안녕하세요! 서울이음 챗봇입니다. 서울 관광·커뮤니티에 대해 물어보세요.',
   },
 ])
 const draft = ref('')
