@@ -1,12 +1,11 @@
 <template>
   <div
     v-if="open"
-    class="fixed inset-0 z-50"
-    @keydown.esc="$emit('close')"
+    class="pointer-events-none fixed inset-0 z-50"
   >
-    <div class="absolute inset-0 bg-ink/20" @click="$emit('close')" />
+    <div class="absolute inset-0 bg-ink/20" />
     <div
-      class="animate-scale-in absolute right-3 top-16 flex h-[min(560px,70vh)] w-[min(380px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-line/70 bg-surface shadow-soft sm:right-6"
+      class="pointer-events-auto animate-scale-in absolute right-3 top-16 flex h-[min(560px,70vh)] w-[min(380px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-line/70 bg-surface shadow-soft sm:right-6"
       role="dialog"
       aria-label="챗봇"
     >
