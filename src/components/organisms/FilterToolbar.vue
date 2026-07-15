@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col gap-3 rounded-2xl bg-main p-3 shadow-soft backdrop-blur-sm md:flex-row md:items-end"
+    class="flex flex-col gap-3 rounded-2xl border border-line/70 bg-main p-3 shadow-soft md:flex-row md:items-end"
   >
     <SearchField
       v-model="localQuery"

@@ -7,11 +7,13 @@
       </p>
     </div>
 
-    <SearchField
-      v-model="query"
-      placeholder="도착지 장소명 또는 주소 검색"
-      @search="onSearch"
-    />
+    <div class="rounded-2xl border border-line/70 bg-main p-3 shadow-soft">
+      <SearchField
+        v-model="query"
+        placeholder="도착지 장소명 또는 주소 검색"
+        @search="onSearch"
+      />
+    </div>
 
     <p v-if="loading" class="mt-4 text-xs text-muted">경로를 찾는 중…</p>
     <p v-else-if="status === 'pending'" class="mt-4 text-xs text-muted">

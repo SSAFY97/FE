@@ -1,13 +1,13 @@
 <template>
-  <div class="flex w-full gap-2">
+  <div class="flex w-full items-stretch gap-2">
     <BaseInput
       :model-value="modelValue"
-      class="flex-1"
+      class="min-w-0 flex-1"
       :placeholder="placeholder"
       @update:model-value="$emit('update:modelValue', $event)"
       @keyup.enter="$emit('search')"
     />
-    <BaseButton @click="$emit('search')">
+    <BaseButton class="shrink-0" @click="$emit('search')">
       <BaseIcon name="search" :size="16" />
       검색
     </BaseButton>
