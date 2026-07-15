@@ -37,7 +37,7 @@ const props = defineProps({
 
 const variantClass = computed(() => {
   const map = {
-    primary: 'bg-accent text-ink hover:brightness-105 shadow-soft',
+    primary: 'bg-main text-ink hover:brightness-105 shadow-soft',
     secondary: 'bg-accent-soft text-ink hover:bg-main',
     ghost: 'bg-transparent text-ink hover:bg-accent-soft',
     danger: 'bg-danger text-ink hover:brightness-105',

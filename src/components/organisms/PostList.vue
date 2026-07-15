@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-hidden rounded-2xl bg-main shadow-soft">
+  <div class="flex flex-col gap-3">
     <PostListItem v-for="post in posts" :key="post.id" :post="post" />
     <p v-if="!posts.length" class="py-12 text-center text-sm text-muted">
       게시글이 없습니다.

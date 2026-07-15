@@ -9,7 +9,7 @@
           class="shrink-0 rounded-xl px-3 py-2 text-sm transition"
           :class="
             tab.key === active
-              ? 'bg-accent text-ink shadow-soft'
+              ? 'bg-main text-ink shadow-soft'
               : 'bg-accent-soft text-ink hover:bg-accent-soft'
           "
           @click="$emit('select', tab.key)"

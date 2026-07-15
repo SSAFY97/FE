@@ -1,9 +1,9 @@
 <template>
-  <div class="mx-auto max-w-2xl px-4 py-8">
+  <div class="mx-auto max-w-2xl px-4 pt-24">
     <div v-if="loading" class="h-72 animate-pulse rounded-2xl bg-main" />
     <article v-else-if="post" class="animate-fade-in">
       <div class="mb-4 flex flex-wrap items-center gap-2">
-        <RouterLink to="/community" class="text-sm text-accent hover:underline">
+        <RouterLink to="/community" class="text-sm text-ink hover:underline">
           ← 목록
         </RouterLink>
       </div>

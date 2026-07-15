@@ -1,11 +1,11 @@
 <template>
   <RouterLink
     :to="`/community/${post.id}`"
-    class="flex items-center justify-between gap-4 border-b border-line/70 px-2 py-4 transition hover:bg-main"
+    class="flex items-center justify-between gap-4 rounded-2xl bg-main px-4 py-5 shadow-soft transition hover:brightness-[1.02]"
   >
     <div class="min-w-0 flex-1">
       <p class="truncate text-sm text-ink">{{ post.title }}</p>
-      <p class="mt-1 text-xs text-muted">
+      <p class="mt-1.5 text-xs text-muted">
         {{ post.author }} · {{ formatDate(post.createdAt) }}
       </p>
     </div>

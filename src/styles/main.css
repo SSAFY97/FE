@@ -16,7 +16,7 @@
   --color-surface: #edeaf5;
   --color-ink: #2f3443;
   --color-muted: #666d7d;
-  --color-accent: #ffffff;
+  --color-accent: #6a66a8;
   --color-accent-soft: #ebe8f2;
   --color-line: #d3d6e2;
   --color-danger: #df9c90;
@@ -29,8 +29,8 @@
   --color-surface: oklch(93% 0.034 272.788);
   --color-ink: oklch(30% 0.045 274);
   --color-muted: oklch(50% 0.03 274);
-  --color-accent: oklch(99% 0.004 272.788);
-  --color-accent-soft: oklch(92% 0.018 272.788);
+  --color-accent: oklch(52% 0.1 280);
+  --color-accent-soft: oklch(92% 0.03 280);
   --color-line: oklch(84% 0.022 278);
   --color-danger: oklch(72% 0.08 16);
   --color-danger-soft: oklch(92% 0.03 12);
@@ -44,7 +44,7 @@ html[data-theme='dark'] {
   --color-surface: #171a26;
   --color-ink: #e8eaf5;
   --color-muted: #b8bdd0;
-  --color-accent: #292d3f;
+  --color-accent: #b4b0e0;
   --color-accent-soft: #32374b;
   --color-line: #3b4058;
   --color-danger: #e2a59b;
@@ -56,8 +56,8 @@ html[data-theme='dark'] {
   --color-surface: oklch(21% 0.02 275);
   --color-ink: oklch(93% 0.015 275);
   --color-muted: oklch(79% 0.018 275);
-  --color-accent: oklch(31% 0.025 275);
-  --color-accent-soft: oklch(36% 0.025 275);
+  --color-accent: oklch(78% 0.08 280);
+  --color-accent-soft: oklch(34% 0.04 280);
   --color-line: oklch(43% 0.02 275);
   --color-danger: oklch(73% 0.075 20);
   --color-danger-soft: oklch(38% 0.045 20);

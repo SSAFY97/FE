@@ -8,7 +8,7 @@
       </div>
       <RouterLink
         to="/community/write"
-        class="inline-flex items-center justify-center rounded-xl bg-accent px-4 py-2 text-sm text-ink shadow-soft transition hover:brightness-110"
+        class="inline-flex items-center justify-center rounded-xl bg-main px-4 py-2 text-sm text-ink shadow-soft transition hover:brightness-110"
       >
         글쓰기
       </RouterLink>
