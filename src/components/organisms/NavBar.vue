@@ -25,6 +25,14 @@
           커뮤니티
         </RouterLink>
         <button
+          type="button"
+          class="rounded-xl p-2 text-ink/80 transition hover:bg-accent-soft hover:text-ink"
+          :aria-label="isDark ? '라이트모드로 전환' : '다크모드로 전환'"
+          @click="toggleTheme"
+        >
+          <BaseIcon :name="isDark ? 'sun' : 'moon'" :size="20" />
+        </button>
+        <button
           ref="chatBtnRef"
           type="button"
           class="relative rounded-xl p-2 text-ink/80 transition hover:bg-accent-soft hover:text-ink"
@@ -42,10 +50,12 @@
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import BaseIcon from '@/components/atoms/BaseIcon.vue'
+import { useTheme } from '@/composables/useTheme'
 
 defineEmits(['toggle-chat'])
 
 const chatBtnRef = ref(null)
+const { isDark, toggleTheme } = useTheme()
 
 defineExpose({ chatBtnRef })
 </script>

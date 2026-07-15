@@ -38,6 +38,33 @@
   --color-warm-ink: oklch(49% 0.08 42);
 }
 
+html[data-theme='dark'] {
+  /* 파스텔 무드를 유지한 다크 톤 */
+  --color-main: oklch(26.9% 0 0);
+  --color-surface: #171a26;
+  --color-ink: #e8eaf5;
+  --color-muted: #b8bdd0;
+  --color-accent: #292d3f;
+  --color-accent-soft: #32374b;
+  --color-line: #3b4058;
+  --color-danger: #e2a59b;
+  --color-danger-soft: #4a2f33;
+  --color-warm: #5c4c36;
+  --color-warm-ink: #f4dcc1;
+
+  --color-main: oklch(26.9% 0 0);
+  --color-surface: oklch(21% 0.02 275);
+  --color-ink: oklch(93% 0.015 275);
+  --color-muted: oklch(79% 0.018 275);
+  --color-accent: oklch(31% 0.025 275);
+  --color-accent-soft: oklch(36% 0.025 275);
+  --color-line: oklch(43% 0.02 275);
+  --color-danger: oklch(73% 0.075 20);
+  --color-danger-soft: oklch(38% 0.045 20);
+  --color-warm: oklch(41% 0.04 64);
+  --color-warm-ink: oklch(87% 0.05 66);
+}
+
 @layer base {
   html,
   body,
@@ -69,6 +96,15 @@
     background-repeat: no-repeat;
     background-size: 100% 100vh;
     background-attachment: fixed;
+  }
+
+  html[data-theme='dark'] .bg-subpage-radial {
+    background-color: oklch(22% 0.02 275);
+    background-image: linear-gradient(
+      135deg,
+      oklch(27% 0.03 245) 0%,
+      oklch(26% 0.03 305) 100%
+    );
   }
 
   .line-clamp-2 {

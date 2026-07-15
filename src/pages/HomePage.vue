@@ -2,7 +2,7 @@
   <div class="relative overflow-hidden">
     <div
       class="hero-fade pointer-events-none absolute inset-x-0 top-0 h-[80vh] bg-cover bg-center"
-      style="background-image: url('/hero_light.webp')"
+      :style="heroStyle"
     >
       <div
         class="absolute inset-0 bg-gradient-to-b from-surface/15 via-transparent to-transparent"
@@ -32,12 +32,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import TourPreviewTabs from '@/components/organisms/TourPreviewTabs.vue'
 import HotPostList from '@/components/organisms/HotPostList.vue'
 import { TOUR_CATEGORIES } from '@/constants/tourism'
 import { tourismApi } from '@/services/tourismApi'
 import { postApi } from '@/services/postApi'
+import { useTheme } from '@/composables/useTheme'
 
 const tabs = TOUR_CATEGORIES
 const activeTab = ref(tabs[0].key)
@@ -45,6 +46,10 @@ const loadedTab = ref(tabs[0].key)
 const previewItems = ref([])
 const previewLoading = ref(true)
 const hotPosts = ref([])
+const { isDark } = useTheme()
+const heroStyle = computed(() => ({
+  backgroundImage: `url('${isDark.value ? '/hero_dark.webp' : '/hero_light.webp'}')`,
+}))
 let timer = null
 let loadSeq = 0
 
