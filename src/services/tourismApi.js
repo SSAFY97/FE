@@ -2,36 +2,39 @@ import { locationApi } from '@/api/locationApi'
 import { TOUR_CATEGORIES, SEOUL_CITY_HALL } from '@/constants/tourism'
 import { haversineKm } from '@/utils/hash'
 
-/** @type {import('@/types/location.js').LocationListItem[] | null} */
-let cache = null
-/** @type {Promise<import('@/types/location.js').LocationListItem[]> | null} */
-let loading = null
+/** @type {Map<string, import('@/types/location.js').LocationListItem[]>} */
+const cache = new Map()
+/** @type {Map<string, Promise<import('@/types/location.js').LocationListItem[]>>} */
+const loading = new Map()
 
-async function loadAll() {
-  if (cache) return cache
-  if (!loading) {
-    loading = locationApi.list().then((items) => {
-      cache = items
-      loading = null
-      return items
-    })
+async function loadCategory(category) {
+  const key = category || '전체'
+  if (cache.has(key)) return cache.get(key)
+  if (!loading.has(key)) {
+    loading.set(
+      key,
+      locationApi
+        .list({ category: key === '전체' ? undefined : key })
+        .then((items) => {
+          cache.set(key, items)
+          loading.delete(key)
+          return items
+        })
+        .catch((err) => {
+          loading.delete(key)
+          throw err
+        }),
+    )
   }
-  return loading
-}
-
-function typeIdForCategory(category) {
-  return TOUR_CATEGORIES.find((c) => c.key === category)?.contentTypeId
+  return loading.get(key)
 }
 
 /**
- * tourismApi — uses GET /api/locations with client-side filter/sort.
+ * tourismApi — uses GET /api/locations with BE category filter + client sort.
  */
 export const tourismApi = {
   async getByCategory(category) {
-    const items = await loadAll()
-    const typeId = typeIdForCategory(category)
-    if (!typeId) return items
-    return items.filter((item) => String(item.contenttypeid) === String(typeId))
+    return loadCategory(category)
   },
 
   async getPreview(category, limit = 8) {
@@ -49,9 +52,12 @@ export const tourismApi = {
   } = {}) {
     let items = []
     if (category === '전체') {
-      items = [...(await loadAll())]
+      const batches = await Promise.all(
+        TOUR_CATEGORIES.map((c) => loadCategory(c.key)),
+      )
+      items = batches.flat()
     } else {
-      items = await this.getByCategory(category)
+      items = [...(await loadCategory(category))]
     }
 
     const q = query.trim().toLowerCase()

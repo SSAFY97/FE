@@ -45,7 +45,8 @@ export async function request(method, path, body) {
     'response' in payload &&
     'data' in payload
   ) {
-    if (payload.response !== 200) {
+    const code = Number(payload.response)
+    if (!Number.isFinite(code) || code < 200 || code >= 300) {
       throw new Error(payload.message || `API_${payload.response}`)
     }
     return payload.data
@@ -58,5 +59,5 @@ export const http = {
   get: (path) => request('GET', path),
   post: (path, body) => request('POST', path, body),
   put: (path, body) => request('PUT', path, body),
-  delete: (path) => request('DELETE', path),
+  delete: (path, body) => request('DELETE', path, body),
 }

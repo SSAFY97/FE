@@ -11,7 +11,7 @@ export const chatApi = {
     if (!message?.trim()) throw new Error('VALIDATION')
     const data = await remoteChatApi.send({ message: message.trim() })
     return {
-      reply: data?.message ?? '',
+      reply: data?.answer ?? data?.message ?? '',
     }
   },
 }

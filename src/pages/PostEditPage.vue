@@ -56,13 +56,14 @@ async function onSubmit() {
       title: form.title,
       content: form.content,
       password: form.password,
+      author: form.author,
     })
     router.push(`/community/${id}`)
   } catch (e) {
     error.value =
-      e.message === 'FORBIDDEN'
+      e.message === 'FORBIDDEN' || /비밀번호|password|권한/i.test(e.message || '')
         ? '비밀번호가 올바르지 않습니다.'
-        : '수정에 실패했습니다.'
+        : e.message || '수정에 실패했습니다.'
   } finally {
     loading.value = false
   }

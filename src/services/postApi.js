@@ -33,14 +33,8 @@ function toUiPost(board, likedIds = readLikedIds()) {
   }
 }
 
-function assertPassword(board, password) {
-  if (String(board.board_password) !== String(password)) {
-    throw new Error('FORBIDDEN')
-  }
-}
-
 /**
- * postApi — UI-facing service over /api/posts.
+ * postApi — UI-facing service over /api/posts (BE schema mapped).
  */
 export const postApi = {
   async list({ query = '', sort = 'latest' } = {}) {
@@ -50,9 +44,9 @@ export const postApi = {
     if (q) {
       posts = posts.filter(
         (p) =>
-          p.title.toLowerCase().includes(q) ||
-          p.author.toLowerCase().includes(q) ||
-          p.content.toLowerCase().includes(q),
+          (p.title || '').toLowerCase().includes(q) ||
+          (p.author || '').toLowerCase().includes(q) ||
+          (p.content || '').toLowerCase().includes(q),
       )
     }
     const sorted = [...posts]
@@ -71,22 +65,10 @@ export const postApi = {
   },
 
   async get(id, { incrementView = true } = {}) {
+    // BE increments views on GET; `incrementView` kept for call-site compat.
+    void incrementView
     const board = await boardApi.get(id)
     if (!board) throw new Error('NOT_FOUND')
-    if (incrementView) {
-      const next = {
-        board_id: Number(board.board_id ?? board.id),
-        board_title: board.board_title,
-        board_content: board.board_content,
-        board_writer: board.board_writer,
-        board_password: board.board_password,
-        board_views: (Number(board.board_views) || 0) + 1,
-        board_likes: Number(board.board_likes) || 0,
-        created_at: board.created_at,
-      }
-      const updated = await boardApi.update(next)
-      return toUiPost(updated)
-    }
     return toUiPost(board)
   },
 
@@ -103,28 +85,19 @@ export const postApi = {
     return toUiPost(created)
   },
 
-  async update(id, { title, content, password }) {
-    const board = await boardApi.get(id)
-    if (!board) throw new Error('NOT_FOUND')
-    assertPassword(board, password)
+  async update(id, { title, content, password, author }) {
     const updated = await boardApi.update({
-      board_id: Number(board.board_id ?? board.id),
+      board_id: id,
       board_title: title.trim(),
       board_content: content.trim(),
-      board_writer: board.board_writer,
-      board_password: board.board_password,
-      board_views: Number(board.board_views) || 0,
-      board_likes: Number(board.board_likes) || 0,
-      created_at: board.created_at,
+      board_writer: (author || '').trim(),
+      board_password: password,
     })
     return toUiPost(updated)
   },
 
   async remove(id, { password }) {
-    const board = await boardApi.get(id)
-    if (!board) throw new Error('NOT_FOUND')
-    assertPassword(board, password)
-    await boardApi.remove(id)
+    await boardApi.remove(id, { password })
     const liked = readLikedIds()
     liked.delete(String(id))
     writeLikedIds(liked)
@@ -132,29 +105,15 @@ export const postApi = {
   },
 
   async like(id) {
-    const board = await boardApi.get(id)
-    if (!board) throw new Error('NOT_FOUND')
+    const result = await boardApi.like(id)
     const liked = readLikedIds()
-    const key = String(id)
-    let likes = Number(board.board_likes) || 0
-    if (liked.has(key)) {
-      liked.delete(key)
-      likes = Math.max(0, likes - 1)
-    } else {
-      liked.add(key)
-      likes += 1
-    }
+    const key = String(result.post_id ?? id)
+    liked.add(key)
     writeLikedIds(liked)
-    const updated = await boardApi.update({
-      board_id: Number(board.board_id ?? board.id),
-      board_title: board.board_title,
-      board_content: board.board_content,
-      board_writer: board.board_writer,
-      board_password: board.board_password,
-      board_views: Number(board.board_views) || 0,
-      board_likes: likes,
-      created_at: board.created_at,
-    })
-    return toUiPost(updated, liked)
+    return {
+      id: key,
+      likes: Number(result.like_count) || 0,
+      liked: true,
+    }
   },
 }
