@@ -15,7 +15,7 @@
       v-model:sort="sort"
       :show-category="false"
       :sort-options="POST_SORT_OPTIONS"
-      search-placeholder="제목, 작성자, 내용 검색"
+      search-placeholder="제목, 작성자 검색"
       @search="onSearch"
     />
 
