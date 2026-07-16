@@ -60,6 +60,11 @@
     <template v-else-if="name === 'chevron-down'">
       <path d="m6 9 6 6 6-6" />
     </template>
+    <template v-else-if="name === 'menu'">
+      <path d="M4 6h16" />
+      <path d="M4 12h16" />
+      <path d="M4 18h16" />
+    </template>
   </svg>
 </template>
 
