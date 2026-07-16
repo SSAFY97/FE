@@ -3,40 +3,28 @@
     class="fixed left-1/2 top-3 z-40 w-full max-w-5xl -translate-x-1/2 px-4"
   >
     <div
-      class="flex h-14 items-center justify-between rounded-2xl border border-line/70 bg-main px-4 font-display shadow-soft backdrop-blur-sm sm:px-6"
+      class="bg-nav-glass flex h-14 items-center justify-between gap-2 rounded-2xl border border-line/70 px-3 shadow-soft backdrop-blur-md sm:px-6"
     >
       <RouterLink
         to="/"
-        class="flex items-center gap-2 text-lg tracking-tight text-ink transition hover:text-accent"
+        class="font-display shrink-0 text-base tracking-tight text-ink transition hover:text-accent sm:text-lg"
       >
         서울이음
       </RouterLink>
 
-      <nav class="flex items-center gap-1 sm:gap-2">
+      <nav class="flex min-w-0 items-center gap-0.5 sm:gap-2">
         <RouterLink
-          to="/tourism"
-          class="rounded-xl px-3 py-2 text-sm text-ink/80 transition hover:bg-accent-soft hover:text-ink"
-          active-class="bg-accent-soft !text-ink"
+          v-for="item in navItems"
+          :key="item.to"
+          :to="item.to"
+          class="rounded-xl px-2 py-1.5 font-sans text-xs text-ink transition hover:bg-accent-soft sm:px-3 sm:py-2 sm:text-sm"
+          active-class="bg-accent !text-on-accent shadow-soft"
         >
-          관광정보
-        </RouterLink>
-        <RouterLink
-          to="/directions"
-          class="rounded-xl px-3 py-2 text-sm text-ink/80 transition hover:bg-accent-soft hover:text-ink"
-          active-class="bg-accent-soft !text-ink"
-        >
-          길찾기
-        </RouterLink>
-        <RouterLink
-          to="/community"
-          class="rounded-xl px-3 py-2 text-sm text-ink/80 transition hover:bg-accent-soft hover:text-ink"
-          active-class="bg-accent-soft !text-ink"
-        >
-          커뮤니티
+          {{ item.label }}
         </RouterLink>
         <button
           type="button"
-          class="rounded-xl p-2 text-ink/80 transition hover:bg-accent-soft hover:text-ink"
+          class="rounded-xl p-2 text-ink transition hover:bg-accent-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           :aria-label="isDark ? '라이트모드로 전환' : '다크모드로 전환'"
           @click="toggleTheme"
         >
@@ -45,7 +33,7 @@
         <button
           ref="chatBtnRef"
           type="button"
-          class="relative rounded-xl p-2 text-ink/80 transition hover:bg-accent-soft hover:text-ink"
+          class="relative rounded-xl p-2 text-ink transition hover:bg-accent-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           aria-label="챗봇 열기"
           @click="$emit('toggle-chat')"
         >
@@ -63,6 +51,12 @@ import BaseIcon from '@/components/atoms/BaseIcon.vue'
 import { useTheme } from '@/composables/useTheme'
 
 defineEmits(['toggle-chat'])
+
+const navItems = [
+  { to: '/tourism', label: '관광정보' },
+  { to: '/directions', label: '길찾기' },
+  { to: '/community', label: '커뮤니티' },
+]
 
 const chatBtnRef = ref(null)
 const { isDark, toggleTheme } = useTheme()
