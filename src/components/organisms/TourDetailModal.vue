@@ -33,8 +33,8 @@
         </span>
       </div>
 
-      <div class="overflow-hidden rounded-2xl border border-line/70 bg-main">
-        <div class="border-b border-line/50 px-4 py-3.5">
+      <div class="overflow-hidden rounded-2xl border border-line bg-main">
+        <div class="border-b border-line px-4 py-3.5">
           <p class="text-xs font-medium text-muted">주소</p>
           <p class="mt-1 text-sm leading-relaxed text-ink">
             {{ addressText }}
@@ -60,7 +60,7 @@
           :disabled="!hasCoords"
           @click="goDirections"
         >
-          이 장소 길찾기
+          이 장소까지 산책하기
         </BaseButton>
         <p v-if="!hasCoords" class="text-center text-xs text-muted">
           좌표 정보가 없어 길찾기를 할 수 없습니다

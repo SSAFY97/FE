@@ -37,7 +37,7 @@
       <div
         v-for="n in 8"
         :key="n"
-        class="h-60 animate-pulse rounded-2xl border border-line/50 bg-accent-soft"
+        class="h-60 animate-pulse rounded-2xl border border-line bg-accent-soft"
       />
     </div>
     <StateMessage

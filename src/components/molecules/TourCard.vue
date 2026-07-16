@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="group flex h-60 w-full flex-col overflow-hidden rounded-2xl border border-line/70 bg-main text-left shadow-soft transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:brightness-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    class="group flex h-60 w-full flex-col overflow-hidden rounded-2xl border border-line bg-main text-left shadow-soft transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:brightness-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     @click="$emit('select', item)"
   >
     <div class="h-36 w-full shrink-0 overflow-hidden bg-accent-soft">

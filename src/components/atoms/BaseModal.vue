@@ -1,11 +1,11 @@
 <template>
   <div
     v-if="open"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-scrim p-4 backdrop-blur-[2px]"
+    class="fixed inset-0 z-[60] flex items-center justify-center bg-scrim p-4 backdrop-blur-[2px]"
     @click.self="emit('close')"
   >
     <div
-      class="animate-scale-in flex max-h-[min(90vh,40rem)] w-full flex-col rounded-2xl border border-line/60 bg-main shadow-soft"
+      class="animate-scale-in flex max-h-[min(90vh,40rem)] w-full flex-col rounded-2xl border border-line bg-main shadow-soft"
       :class="sizeClass"
       role="dialog"
       aria-modal="true"

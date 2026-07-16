@@ -1,10 +1,10 @@
 <template>
   <div
-    class="max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed"
+    class="max-w-[85%] px-3.5 py-2.5 text-sm leading-relaxed"
     :class="
       role === 'user'
-        ? 'ml-auto bg-accent-soft text-ink'
-        : 'mr-auto bg-main text-ink shadow-soft'
+        ? 'ml-auto rounded-2xl rounded-br-md bg-accent-soft text-ink'
+        : 'mr-auto rounded-2xl rounded-bl-md bg-main text-ink shadow-soft'
     "
   >
     {{ text }}

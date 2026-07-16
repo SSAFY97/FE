@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative h-full min-h-[20rem] w-full overflow-hidden rounded-2xl border border-line/70 bg-main"
+    class="relative h-full min-h-[20rem] w-full overflow-hidden rounded-2xl border border-line bg-main"
   >
     <div ref="mapEl" class="absolute inset-0 h-full w-full" />
     <div

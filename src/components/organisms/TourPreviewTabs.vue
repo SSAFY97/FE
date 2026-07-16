@@ -7,7 +7,7 @@
     @focusout="onFocusOut"
   >
     <div
-      class="overflow-hidden rounded-3xl border border-line/50 bg-surface/80 p-4 shadow-soft backdrop-blur-md sm:p-6"
+      class="overflow-hidden rounded-3xl border border-line bg-surface/80 p-4 shadow-soft backdrop-blur-md sm:p-6"
     >
       <div class="mb-4 flex gap-1 overflow-x-auto pb-1 [scrollbar-width:thin]" role="tablist">
         <button
@@ -20,7 +20,7 @@
           :class="
             tab.key === active
               ? 'border-accent bg-accent text-on-accent shadow-soft'
-              : 'border-line/70 bg-main text-ink hover:border-accent/40'
+              : 'border-line bg-main text-ink hover:border-accent/40'
           "
           @click="$emit('select', tab.key)"
         >
@@ -39,7 +39,7 @@
           <div
             v-for="n in 8"
             :key="n"
-            class="h-60 animate-pulse rounded-2xl border border-line/50 bg-accent-soft"
+            class="h-60 animate-pulse rounded-2xl border border-line bg-accent-soft"
           />
         </div>
 

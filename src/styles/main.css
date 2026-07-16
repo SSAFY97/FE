@@ -102,7 +102,7 @@ html[data-theme='dark'] {
   --color-muted: #b8bdd0;
   --color-accent: #8b85c9;
   --color-accent-soft: #32374b;
-  --color-line: #5a6080;
+  --color-line: #1e293b;
   --color-danger: #e2a59b;
   --color-danger-soft: #4a2f33;
   --color-like: #e8a0b0;
@@ -119,7 +119,7 @@ html[data-theme='dark'] {
   /* Primary 채움용: 흰 글자와 대비되도록 다크에서도 중간 명도 유지 */
   --color-accent: oklch(62% 0.12 280);
   --color-accent-soft: oklch(34% 0.04 280);
-  --color-line: oklch(50% 0.025 275);
+  --color-line: oklch(30% 0.02 255);
   --color-danger: oklch(73% 0.075 20);
   --color-danger-soft: oklch(38% 0.045 20);
   --color-like: oklch(78% 0.09 8);

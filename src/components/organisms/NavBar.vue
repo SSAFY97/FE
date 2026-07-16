@@ -3,7 +3,7 @@
     class="fixed left-1/2 top-3 z-40 w-full max-w-5xl -translate-x-1/2 px-4"
   >
     <div
-      class="bg-nav-glass flex h-14 items-center justify-between gap-2 rounded-2xl border border-line/70 px-3 shadow-soft backdrop-blur-md sm:px-6"
+      class="bg-nav-glass flex h-14 items-center justify-between gap-2 rounded-2xl border border-line px-3 shadow-soft backdrop-blur-md sm:px-6"
     >
       <RouterLink
         to="/"
@@ -30,27 +30,15 @@
         >
           <BaseIcon :name="isDark ? 'sun' : 'moon'" :size="20" />
         </button>
-        <button
-          ref="chatBtnRef"
-          type="button"
-          class="relative rounded-xl p-2 text-ink transition hover:bg-accent-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-          aria-label="챗봇 열기"
-          @click="$emit('toggle-chat')"
-        >
-          <BaseIcon name="bot" :size="20" />
-        </button>
       </nav>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import BaseIcon from '@/components/atoms/BaseIcon.vue'
 import { useTheme } from '@/composables/useTheme'
-
-defineEmits(['toggle-chat'])
 
 const navItems = [
   { to: '/tourism', label: '관광정보' },
@@ -58,8 +46,5 @@ const navItems = [
   { to: '/community', label: '커뮤니티' },
 ]
 
-const chatBtnRef = ref(null)
 const { isDark, toggleTheme } = useTheme()
-
-defineExpose({ chatBtnRef })
 </script>

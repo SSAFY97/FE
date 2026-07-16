@@ -33,7 +33,7 @@
           {{ post.content }}
         </div>
 
-        <div class="mt-6 flex gap-2 border-t border-line/70 pt-4">
+        <div class="mt-6 flex gap-2 border-t border-line pt-4">
           <BaseButton variant="secondary" @click="$router.push(`/community/${post.id}/edit`)">
             수정
           </BaseButton>

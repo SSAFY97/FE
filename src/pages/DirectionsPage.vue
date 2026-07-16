@@ -7,7 +7,7 @@
       </p>
     </div>
 
-    <div class="rounded-2xl border border-line/70 bg-main p-3 shadow-soft">
+    <div class="rounded-2xl border border-line bg-main p-3 shadow-soft">
       <SearchField
         v-model="query"
         placeholder="도착지 장소명 또는 주소 검색"
@@ -28,7 +28,7 @@
 
     <div
       v-if="destination || routeSummary"
-      class="mt-4 rounded-xl border border-line/70 bg-main px-4 py-3 text-sm text-ink"
+      class="mt-4 rounded-xl border border-line bg-main px-4 py-3 text-sm text-ink"
     >
       <p>
         <span class="text-muted">출발</span>
