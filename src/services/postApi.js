@@ -105,13 +105,17 @@ export const postApi = {
   },
 
   async like(id) {
-    const result = await boardApi.like(id)
     const liked = readLikedIds()
-    const key = String(result.post_id ?? id)
-    liked.add(key)
+    const key = String(id)
+    if (liked.has(key)) {
+      return { id: key, likes: null, liked: true }
+    }
+    const result = await boardApi.like(id)
+    const resultKey = String(result.post_id ?? id)
+    liked.add(resultKey)
     writeLikedIds(liked)
     return {
-      id: key,
+      id: resultKey,
       likes: Number(result.like_count) || 0,
       liked: true,
     }

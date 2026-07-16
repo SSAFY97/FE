@@ -69,8 +69,10 @@ export const tourismApi = {
       )
     }
 
-    const sorted = [...items]
+    let sorted = [...items]
     if (sort === 'name') {
+      const startsWithWord = (t) => /^[가-힣a-zA-Z0-9]/.test((t || '').trim())
+      sorted = sorted.filter((item) => startsWithWord(item.title))
       sorted.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'ko'))
     } else if (sort === 'distance') {
       sorted.sort((a, b) => {

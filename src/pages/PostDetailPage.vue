@@ -92,12 +92,13 @@ onMounted(async () => {
 })
 
 async function toggleLike() {
+  if (post.value?.liked) return
   try {
     const liked = await postApi.like(route.params.id)
     if (!post.value) return
     post.value = {
       ...post.value,
-      likes: liked.likes,
+      likes: liked.likes ?? post.value.likes,
       liked: liked.liked,
     }
   } catch {

@@ -43,7 +43,7 @@ const props = defineProps({
     default: () => ({ author: '', password: '', title: '', content: '' }),
   },
   submitLabel: { type: String, default: '등록' },
-  passwordPlaceholder: { type: String, default: '수정/삭제 시 사용할 비밀번호' },
+  passwordPlaceholder: { type: String, default: '4자리 이상' },
   loading: Boolean,
   lockAuthor: Boolean,
 })
